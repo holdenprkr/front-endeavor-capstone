@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Front-Endeavor", "Front-Endeavor.csproj", "{868BA624-9C20-4EB0-8C39-7A63DF9F46DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{868BA624-9C20-4EB0-8C39-7A63DF9F46DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868BA624-9C20-4EB0-8C39-7A63DF9F46DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868BA624-9C20-4EB0-8C39-7A63DF9F46DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868BA624-9C20-4EB0-8C39-7A63DF9F46DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41E18163-B29A-4D02-B8F0-47467884AEA9}
+	EndGlobalSection
+EndGlobal
