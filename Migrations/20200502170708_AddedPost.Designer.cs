@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Front_Endeavor.Data.Migrations
+namespace Front_Endeavor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200501162929_Initial")]
-    partial class Initial
+    [Migration("20200502170708_AddedPost")]
+    partial class AddedPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,9 +97,23 @@ namespace Front_Endeavor.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("WorkspaceId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Post");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                            Pinned = false,
+                            Text = "Wow! It works!",
+                            Timestamp = new DateTime(2020, 5, 2, 12, 7, 8, 403, DateTimeKind.Local).AddTicks(5052),
+                            WorkspaceId = 1
+                        });
                 });
 
             modelBuilder.Entity("Front_Endeavor.Models.UserWorkspace", b =>
@@ -110,7 +124,7 @@ namespace Front_Endeavor.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("DevLead")
                         .HasColumnType("bit");
@@ -119,6 +133,10 @@ namespace Front_Endeavor.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("UserWorkspace");
 
@@ -402,13 +420,13 @@ namespace Front_Endeavor.Data.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dca8362e-0896-46d2-9b19-ac7f934093e0",
+                            ConcurrencyStamp = "2a49a840-e3ff-45fb-84b1-345717c60c35",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJxlWr6Z5oSPjBDrXWrbs9bUzDFzpYjrhNTSlkk1WquASCzILQizgpJTp1uwjajBbQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPpvsihY6hn+MrQqDa0JrZI8rKYTGclenXQZxxdT3g4pXZG/fb0oWsZv9xppCWq/fA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
@@ -416,6 +434,19 @@ namespace Front_Endeavor.Data.Migrations
                             FirstName = "Holden",
                             LastName = "Parker"
                         });
+                });
+
+            modelBuilder.Entity("Front_Endeavor.Models.UserWorkspace", b =>
+                {
+                    b.HasOne("Front_Endeavor.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Front_Endeavor.Models.Workspace", "Workspace")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

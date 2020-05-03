@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Front_Endeavor.Data;
 using Front_Endeavor.Models;
+using Front_Endeavor.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace Front_Endeavor.Controllers
 {
@@ -28,9 +31,66 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: Workspaces/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            //Find the workspace matching the id passed in
+            var workspace = await _context.Workspace
+                .FirstOrDefaultAsync(w => w.Id == id);
+
+            //Build a WorkspaceViewModel
+            var workspaceViewModel = new WorkspaceViewModel()
+            {
+                Id = id,
+                Name = workspace.Name,
+                Color1 = workspace.Color1,
+                Color2 = workspace.Color2,
+                Color3 = workspace.Color3
+            };
+
+            if (!String.IsNullOrEmpty(workspace.Description))
+            {
+                workspaceViewModel.Description = workspace.Description;
+            }
+
+            if (!String.IsNullOrEmpty(workspace.GithubRepo))
+            {
+                workspaceViewModel.GithubRepo = workspace.GithubRepo;
+            }
+
+            if (!String.IsNullOrEmpty(workspace.DataRelatDiagram))
+            {
+                workspaceViewModel.DataRelatDiagram = workspace.DataRelatDiagram;
+            }
+
+            if (!String.IsNullOrEmpty(workspace.MockupDiagram))
+            {
+                workspaceViewModel.MockupDiagram = workspace.MockupDiagram;
+            }
+
+            //Get a list of UserWorkspaces that are a part of the workspace and add to the view model
+            workspaceViewModel.UserWorkspaces = await _context.UserWorkspace
+                .Where(uw => uw.WorkspaceId == id)
+                .Include(uw => uw.ApplicationUser)
+                .ToListAsync();
+
+            //Get a list of all the posts made in the workspace
+            //Build a list of PostViewModels and add to the view model
+            workspaceViewModel.Posts = await _context.Post
+                .Where(p => p.WorkspaceId == id)
+                .Select(p => new PostViewModel()
+                {
+                    Id = p.Id,
+                    Text = p.Text,
+                    ImageFile = p.ImageFile,
+                    Link = p.Link,
+                    ApplicationUserId = p.ApplicationUserId,
+                    Timestamp = p.Timestamp,
+                    Pinned = p.Pinned,
+                    Comments = _context.Comment.Where(c => c.PostId == p.Id).Include(c => c.ApplicationUser).OrderBy(c => c.Timestamp).ToList(),
+                    Likes = _context.Like.Where(l => l.PostId == p.Id).ToList()
+                }).ToListAsync();
+
+            return View(workspaceViewModel);
         }
 
         // GET: Workspaces/Create
@@ -50,7 +110,10 @@ namespace Front_Endeavor.Controllers
                 //Creates new workspace object
                 var newWorkspace = new Workspace
                 {
-                    Name = workspace.Name
+                    Name = workspace.Name,
+                    Color1 = workspace.Color1,
+                    Color2 = workspace.Color2,
+                    Color3 = workspace.Color3
                 };
 
                 if (!String.IsNullOrEmpty(workspace.Description))
@@ -73,21 +136,6 @@ namespace Front_Endeavor.Controllers
                     newWorkspace.MockupDiagram = workspace.MockupDiagram;
                 }
                 
-                if (!String.IsNullOrEmpty(workspace.Color1))
-                {
-                    newWorkspace.Color1 = workspace.Color1;
-                }
-                
-                if (!String.IsNullOrEmpty(workspace.Color2))
-                {
-                    newWorkspace.Color2 = workspace.Color2;
-                }
-                
-                if (!String.IsNullOrEmpty(workspace.Color3))
-                {
-                    newWorkspace.Color3 = workspace.Color3;
-                }
-
                 _context.Workspace.Add(newWorkspace);
                 await _context.SaveChangesAsync();
                 
@@ -103,7 +151,7 @@ namespace Front_Endeavor.Controllers
                 _context.UserWorkspace.Add(userWorkspace);
                 await _context.SaveChangesAsync();
                 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = newWorkspace.Id });
             }
             catch
             {

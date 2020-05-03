@@ -1,0 +1,94 @@
+﻿@model Front_Endeavor.Models.ViewModels.WorkspaceViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+    <div class="text-center">
+        <div class="row">
+            <div class="col-md-3">
+                <button class="btn btn-primary mb-lg-3 mt-1 p-3">Add Users to Your Team</button>
+                @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
+                {
+                    <div>
+                        <h4 class="mb-3 font-weight-normal">Project Links:</h4>
+                        <ul class="text-left">
+                            @if (!String.IsNullOrEmpty(Model.GithubRepo))
+                            {
+                                <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.GithubRepo" target="_blank">GitHub Repository</a></h5></li>
+                            }
+                            @if (!String.IsNullOrEmpty(Model.DataRelatDiagram))
+                            {
+                                <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.DataRelatDiagram" target="_blank">Data Relationship Diagram</a></h5></li>
+                            }
+                            @if (!String.IsNullOrEmpty(Model.MockupDiagram))
+                            {
+                                <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.MockupDiagram" target="_blank">Mockup Diagram</a></h5></li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <div>
+                    <h4 class="mb-3 font-weight-normal">Team Members</h4>
+                        <ul class="text-left">
+                            @foreach (var teammate in Model.UserWorkspaces)
+                            {
+                                if (teammate.DevLead)
+                                {
+                                    <li class="mb-2"><h5 class="font-weight-normal">@teammate.ApplicationUser.FirstName @teammate.ApplicationUser.LastName ⭐</h5></li>
+                                }
+                                else
+                                {
+                                    <li class="mb-2"><h5 class="font-weight-normal">@teammate.ApplicationUser.FirstName @teammate.ApplicationUser.LastName</h5></li>
+                                }
+                            }
+                        </ul>
+</div>
+            </div>
+            <div class="col-md-9">
+                <div class="jumbotron jumbotron-fluid p-1 rounded">
+                    <div class="container text-left">
+                        <h6 class="display-4">@Model.Name</h6>
+                        @if (!String.IsNullOrEmpty(Model.Description))
+                        {
+                            <p class="lead">@Model.Description</p>
+                        }
+                    </div>
+                </div>
+
+                <h3 class="font-weight-normal">Project idea board</h3>
+                <div class="d-inline-block overflow-auto bg-secondary rounded p-3" style="height: 750px; width: 100%;">
+                    @foreach (var post in Model.Posts)
+                    {
+                    <div class="projectPost text-left">
+                        @*image*@
+                        @if (!String.IsNullOrEmpty(post.ImageFile))
+                        {
+                            <div class="text-center">
+                                <img src="~/Images/@post.ImageFile" alt="user posted image" class="w-75 mb-2">
+                            </div>
+                        }
+
+                        @*text*@
+                        <p class="mb-2">@post.Text</p>
+
+                        @*link*@
+                        @if (!String.IsNullOrEmpty(post.Link))
+                        {
+                            <a href="@post.Link" target="_blank" class="mb-2">User Posted Link</a>
+                        }
+                        
+                        @*comments*@
+                        @foreach (var comment in post.Comments)
+                        {
+                            <div>
+                                <p>@comment.Text</p>
+                                <p class="text-right">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.FirstName</p>
+                            </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Front_Endeavor.Models
+namespace Front_Endeavor.Models.ViewModels
 {
-    public class Post
+    public class PostViewModel
     {
         public int Id { get; set; }
         [Required]
@@ -17,8 +17,9 @@ namespace Front_Endeavor.Models
         [AllowNull]
         public string Link { get; set; }
         public string ApplicationUserId { get; set; }
-        public int WorkspaceId { get; set; }
         public DateTime Timestamp { get; set; }
         public bool Pinned { get; set; }
+        public List<Comment> Comments { get; set; }
+        public List<Like> Likes { get; set; }
     }
 }

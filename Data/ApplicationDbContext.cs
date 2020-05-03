@@ -69,6 +69,18 @@ namespace Front_Endeavor.Data
                 }
             );
 
+            modelBuilder.Entity<Post>().HasData(
+                new Post()
+                {
+                    Id = 1,
+                    Text = "Wow! It works!",
+                    WorkspaceId = 1,
+                    ApplicationUserId = "00000000-ffff-ffff-ffff-ffffffffffff",
+                    Timestamp = DateTime.Now,
+                    Pinned = false
+                }
+            );
+
         }
     }
 }

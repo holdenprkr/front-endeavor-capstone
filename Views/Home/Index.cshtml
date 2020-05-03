@@ -1,31 +1,33 @@
-﻿@{
+﻿@model IEnumerable<Front_Endeavor.Models.UserWorkspace>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="text-center">
-        <div class="row">
-            <div class="col-md-3">
-                <button class="btn btn-primary mb-lg-3 mt-1 p-3" onclick="location.href='@Url.Action("Create", "Workspaces")'">Create a Workspace</button>
-                <div>
-                    <p class="mb-3">Projects You're Working On:</p>
-                    <ul class="text-left">
-                        <li class="mb-2">Project 1</li>
-                        <li class="mb-2">Project 2</li>
-                        <li class="mb-2">Project 3</li>
-                        <li class="mb-2">Project 4</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <h1 class="display-4">Front-Endeavor</h1>
-
-                Welcome message/app usage
-
-                Mercury retrograde saturn return raw cacao chanting tincture essential oils, colloidal silver ganja. Maypole harmful electromagnetic fields fractal nature of, healer superfood marinese carob leave no trace kundalini psychic surgery sharing. Coconut water barefoot running Phish dharma, stevia co-op holistic pranayama vinyasa. Quantum perineum lucid dreaming loving kindness discovering valuable truths, The Secret acai berries. Sound healing nonviolent communication personal development twelfth house integral salvia fire tending stable energy fields hemp seed, manifestation acid. Gut flora to end suffering downward dog, reconnect nectar what the planet really needs deep infinite blessings compostable toilet. Goddess geodesic dome trust the process, elder closing circle sacred sexuality activated charcoal with the dolphins popcorn with brewers yeast animal totem rediscovery.
-
-                Acid manifestation astrological empowering messages, native american ancestry salvia visualization Spirit Rock the wisdom of your body seventh generation. Virgo chia seeds herbal tea incense quinoa, diva cup prius. Tofurkey seasonal vitamin-rich the buddha wicca retreat geodesic dome, coconut water with the dolphins innate capacity. Fair trade blessed surrender entheogen projecting rawthentic self, aho life coach short-grain brown rice crystal healing mind-body.
-
-                With the dolphins leave no trace the wisdom of your body Whole Earth Catalog biodiesel, spinal awareness cuddle party rain dance. Tantra free tibet kirtan beekeeping, master cleanse stable energy fields the buddha watsu integral infinite blessings embodied. Papasan organic sunset, natural homebirth nonviolent communication talking stick on the playa spiral dynamics coconut water. Burning man blessed farm to table world soul fertility awareness float tank meditation backjack, cosmic deep tissue. Chi energy co-op reproductive system, agave native american ancestry honoring your truth psychic. Synchronicity grass-fed taurus, kefir combined energy fields fractal nature of. Namaste.
+<div class="text-center">
+    <div class="row">
+        <div class="col-md-3">
+            <button class="btn btn-primary mb-lg-3 mt-1 p-3" onclick="location.href='@Url.Action("Create", "Workspaces")'">Create a Workspace</button>
+            <div>
+                <h4 class="mb-3 font-weight-normal">Your Workspaces:</h4>
+                <ul class="text-left">
+                    @foreach (var userWorkspace in Model)
+                    {
+                        <li><h5 class="font-weight-normal">@Html.ActionLink(userWorkspace.Workspace.Name, "Details", "Workspaces", new { id = userWorkspace.WorkspaceId }, new { area = "" })</h5></li>
+                    }
+                </ul>
             </div>
         </div>
+        <div class="col-md-9">
+            <h1 class="display-4">Front-Endeavor</h1>
+
+            Welcome message/app usage
+
+            Mercury retrograde saturn return raw cacao chanting tincture essential oils, colloidal silver ganja. Maypole harmful electromagnetic fields fractal nature of, healer superfood marinese carob leave no trace kundalini psychic surgery sharing. Coconut water barefoot running Phish dharma, stevia co-op holistic pranayama vinyasa. Quantum perineum lucid dreaming loving kindness discovering valuable truths, The Secret acai berries. Sound healing nonviolent communication personal development twelfth house integral salvia fire tending stable energy fields hemp seed, manifestation acid. Gut flora to end suffering downward dog, reconnect nectar what the planet really needs deep infinite blessings compostable toilet. Goddess geodesic dome trust the process, elder closing circle sacred sexuality activated charcoal with the dolphins popcorn with brewers yeast animal totem rediscovery.
+
+            Acid manifestation astrological empowering messages, native american ancestry salvia visualization Spirit Rock the wisdom of your body seventh generation. Virgo chia seeds herbal tea incense quinoa, diva cup prius. Tofurkey seasonal vitamin-rich the buddha wicca retreat geodesic dome, coconut water with the dolphins innate capacity. Fair trade blessed surrender entheogen projecting rawthentic self, aho life coach short-grain brown rice crystal healing mind-body.
+
+            With the dolphins leave no trace the wisdom of your body Whole Earth Catalog biodiesel, spinal awareness cuddle party rain dance. Tantra free tibet kirtan beekeeping, master cleanse stable energy fields the buddha watsu integral infinite blessings embodied. Papasan organic sunset, natural homebirth nonviolent communication talking stick on the playa spiral dynamics coconut water. Burning man blessed farm to table world soul fertility awareness float tank meditation backjack, cosmic deep tissue. Chi energy co-op reproductive system, agave native american ancestry honoring your truth psychic. Synchronicity grass-fed taurus, kefir combined energy fields fractal nature of. Namaste.
+        </div>
     </div>
+</div>

@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Front_Endeavor.Models
+namespace Front_Endeavor.Models.ViewModels
 {
-    public class Workspace
+    public class WorkspaceViewModel
     {
         public int Id { get; set; }
         [Required]
@@ -23,5 +23,7 @@ namespace Front_Endeavor.Models
         public string Color1 { get; set; }
         public string Color2 { get; set; }
         public string Color3 { get; set; }
+        public List<UserWorkspace> UserWorkspaces { get; set; }
+        public List<PostViewModel> Posts { get; set; }
     }
 }
