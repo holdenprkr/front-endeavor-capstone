@@ -1,84 +1,86 @@
 ﻿@model Front_Endeavor.Models.ViewModels.WorkspaceViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Details";
 }
 
-    <div class="text-center">
-        <div class="row">
-            <div class="col-md-3">
-                <button class="btn btn-primary mb-lg-3 mt-1 p-3">Add Users to Your Team</button>
-                @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
-                {
-                    <div>
-                        <h4 class="mb-3 font-weight-normal">Project Links:</h4>
-                        <ul class="text-left">
-                            @if (!String.IsNullOrEmpty(Model.GithubRepo))
-                            {
-                                <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.GithubRepo" target="_blank">GitHub Repository</a></h5></li>
-                            }
-                            @if (!String.IsNullOrEmpty(Model.DataRelatDiagram))
-                            {
-                                <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.DataRelatDiagram" target="_blank">Data Relationship Diagram</a></h5></li>
-                            }
-                            @if (!String.IsNullOrEmpty(Model.MockupDiagram))
-                            {
-                                <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.MockupDiagram" target="_blank">Mockup Diagram</a></h5></li>
-                            }
-                        </ul>
-                    </div>
-                }
+<div class="text-center">
+    <div class="row">
+        <div class="col-md-3">
+            <button class="btn btn-primary mb-lg-3 mt-1 p-3">Add Users to Your Team</button>
+            @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
+            {
                 <div>
-                    <h4 class="mb-3 font-weight-normal">Team Members</h4>
-                        <ul class="text-left">
-                            @foreach (var teammate in Model.UserWorkspaces)
-                            {
-                                if (teammate.DevLead)
-                                {
-                                    <li class="mb-2"><h5 class="font-weight-normal">@teammate.ApplicationUser.FirstName @teammate.ApplicationUser.LastName ⭐</h5></li>
-                                }
-                                else
-                                {
-                                    <li class="mb-2"><h5 class="font-weight-normal">@teammate.ApplicationUser.FirstName @teammate.ApplicationUser.LastName</h5></li>
-                                }
-                            }
-                        </ul>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="jumbotron jumbotron-fluid p-1 rounded">
-                    <div class="container text-left">
-                        <h6 class="display-4">@Model.Name</h6>
-                        @if (!String.IsNullOrEmpty(Model.Description))
+                    <h4 class="mb-3 font-weight-normal">Project Links:</h4>
+                    <ul class="text-left">
+                        @if (!String.IsNullOrEmpty(Model.GithubRepo))
                         {
-                            <p class="lead">@Model.Description</p>
+                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.GithubRepo" target="_blank">GitHub Repository</a></h5></li>
                         }
-                    </div>
-                </div>
-                <div class="rounded bg-primary">
-                    <h3 class="font-weight-normal">Project idea board</h3>
-                    <div class="d-inline-block overflow-auto bg-secondary rounded p-3" style="max-height: 750px; min-height: 150px; width: 85%;">
-                        @if (Model.Posts.Count == 0)
+                        @if (!String.IsNullOrEmpty(Model.DataRelatDiagram))
                         {
-                            <div class="projectPost text-white">
-                                Oh no! It looks like no one on your team has posted anything yet. 
-                                <br />
-                                Why don't you break the ice?
-                            </div>
+                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.DataRelatDiagram" target="_blank">Data Relationship Diagram</a></h5></li>
+                        }
+                        @if (!String.IsNullOrEmpty(Model.MockupDiagram))
+                        {
+                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.MockupDiagram" target="_blank">Mockup Diagram</a></h5></li>
+                        }
+                    </ul>
+                </div>
+            }
+            <div>
+                <h4 class="mb-3 font-weight-normal">Team Members</h4>
+                <ul class="text-left">
+                    @foreach (var teammate in Model.UserWorkspaces)
+                    {
+                        if (teammate.DevLead)
+                        {
+                            <li class="mb-2"><h5 class="font-weight-normal">@teammate.ApplicationUser.FirstName @teammate.ApplicationUser.LastName ⭐</h5></li>
                         }
                         else
                         {
-                            @foreach (var post in Model.Posts)
-                            {
-                            <div class="projectPost text-left">
+                            <li class="mb-2"><h5 class="font-weight-normal">@teammate.ApplicationUser.FirstName @teammate.ApplicationUser.LastName</h5></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="jumbotron jumbotron-fluid p-1 rounded">
+                <div class="container text-left">
+                    <h6 class="display-4">@Model.Name</h6>
+                    @if (!String.IsNullOrEmpty(Model.Description))
+                    {
+                        <p class="lead">@Model.Description</p>
+                    }
+                </div>
+            </div>
+            <div class="rounded bg-primary">
+                <h3 class="font-weight-normal">Project idea board</h3>
+                <div class="d-inline-block overflow-auto bg-secondary rounded p-3" style="max-height: 750px; min-height: 150px; width: 85%;">
+                    @if (Model.Posts.Count == 0)
+                    {
+                        <div class="projectPost text-white">
+                            Oh no! It looks like no one on your team has posted anything yet.
+                            <br />
+                            Why don't you break the ice?
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var post in Model.Posts)
+                        {
+                            <div class="projectPost text-left mb-2">
                                 @*image*@
-                                @if (!String.IsNullOrEmpty(post.ImageFile))
-                                {
-                                    <div class="text-center">
-                                        <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
-                                    </div>
-                                }
                                 <div class="rounded bg-white p-2">
+                                    @if (!String.IsNullOrEmpty(post.ImageFile))
+                                    {
+                                        <div class="text-center">
+                                            <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
+                                        </div>
+                                    }
                                     @*text*@
                                     <p class="mb-2">@post.Text</p>
 
@@ -87,23 +89,63 @@
                                     {
                                         <a href="@post.Link" target="_blank" class="mb-2">User Posted Link</a>
                                     }
-                                
-                                    <p class="text-right">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
+
+                                    <p class="text-right mb-0">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
+                                    @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
+                                    {
+                                        <div class="text-right">
+                                            <button class="btn btn-outline-success btn-sm">Edit</button>
+                                            <form asp-action="Delete" asp-controller="Posts" method="post">
+                                                <input type="hidden" asp-for="@post.WorkspaceId" value="@Model.Id"/>
+                                                <input type="hidden" asp-for="@post.Id" />
+                                                <input type="submit" value="Delete" class="btn btn-outline-danger btn-sm" />
+                                            </form>
+                                        </div>
+                                    }
                                 </div>
-                        
-                                @*comments*@
-                                @foreach (var comment in post.Comments)
-                                {
-                                    <div>
-                                        <p>@comment.Text</p>
-                                        <p class="text-right">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.FirstName</p>
-                                    </div>
+
+                                    @*comments*@
+                                    @foreach (var comment in post.Comments)
+                                    {
+                                        <div>
+                                            <p>@comment.Text</p>
+                                            <p class="text-right">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.FirstName</p>
+                                        </div>
+                                    }
+                                </div>
+                                }
                                 }
                             </div>
-                            }
-                        }
+                        </div>
+                        <div class="postInputForm">
+                            <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" />
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.PostViewModel.Text" class="control-label text-left">Text:</label>
+                                    <textarea asp-for="@Model.PostViewModel.Text" class="form-control"></textarea>
+                                    <span asp-validation-for="@Model.PostViewModel.Text" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.PostViewModel.Image" class="control-label text-left">Image Upload:</label>
+                                    <input asp-for="@Model.PostViewModel.Image" class="form-control" type="file" />
+                                    <span asp-validation-for="@Model.PostViewModel.Image" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="@Model.PostViewModel.Link" class="control-label text-left">Link:</label>
+                                    <input asp-for="@Model.PostViewModel.Link" class="form-control" type="url" />
+                                    <span asp-validation-for="@Model.PostViewModel.Link" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <input id="Submit" type="submit" value="submit" />
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
