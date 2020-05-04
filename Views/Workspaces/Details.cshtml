@@ -43,7 +43,7 @@
                                 }
                             }
                         </ul>
-</div>
+                </div>
             </div>
             <div class="col-md-9">
                 <div class="jumbotron jumbotron-fluid p-1 rounded">
@@ -55,39 +55,54 @@
                         }
                     </div>
                 </div>
-
-                <h3 class="font-weight-normal">Project idea board</h3>
-                <div class="d-inline-block overflow-auto bg-secondary rounded p-3" style="height: 750px; width: 100%;">
-                    @foreach (var post in Model.Posts)
-                    {
-                    <div class="projectPost text-left">
-                        @*image*@
-                        @if (!String.IsNullOrEmpty(post.ImageFile))
+                <div class="rounded bg-primary">
+                    <h3 class="font-weight-normal">Project idea board</h3>
+                    <div class="d-inline-block overflow-auto bg-secondary rounded p-3" style="max-height: 750px; min-height: 150px; width: 85%;">
+                        @if (Model.Posts.Count == 0)
                         {
-                            <div class="text-center">
-                                <img src="~/Images/@post.ImageFile" alt="user posted image" class="w-75 mb-2">
+                            <div class="projectPost text-white">
+                                Oh no! It looks like no one on your team has posted anything yet. 
+                                <br />
+                                Why don't you break the ice?
                             </div>
                         }
-
-                        @*text*@
-                        <p class="mb-2">@post.Text</p>
-
-                        @*link*@
-                        @if (!String.IsNullOrEmpty(post.Link))
+                        else
                         {
-                            <a href="@post.Link" target="_blank" class="mb-2">User Posted Link</a>
-                        }
+                            @foreach (var post in Model.Posts)
+                            {
+                            <div class="projectPost text-left">
+                                @*image*@
+                                @if (!String.IsNullOrEmpty(post.ImageFile))
+                                {
+                                    <div class="text-center">
+                                        <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
+                                    </div>
+                                }
+                                <div class="rounded bg-white p-2">
+                                    @*text*@
+                                    <p class="mb-2">@post.Text</p>
+
+                                    @*link*@
+                                    @if (!String.IsNullOrEmpty(post.Link))
+                                    {
+                                        <a href="@post.Link" target="_blank" class="mb-2">User Posted Link</a>
+                                    }
+                                
+                                    <p class="text-right">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
+                                </div>
                         
-                        @*comments*@
-                        @foreach (var comment in post.Comments)
-                        {
-                            <div>
-                                <p>@comment.Text</p>
-                                <p class="text-right">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.FirstName</p>
+                                @*comments*@
+                                @foreach (var comment in post.Comments)
+                                {
+                                    <div>
+                                        <p>@comment.Text</p>
+                                        <p class="text-right">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.FirstName</p>
+                                    </div>
+                                }
                             </div>
+                            }
                         }
                     </div>
-                    }
                 </div>
             </div>
         </div>

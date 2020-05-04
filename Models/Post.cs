@@ -17,6 +17,7 @@ namespace Front_Endeavor.Models
         [AllowNull]
         public string Link { get; set; }
         public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
         public int WorkspaceId { get; set; }
         public DateTime Timestamp { get; set; }
         public bool Pinned { get; set; }

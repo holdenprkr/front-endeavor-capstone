@@ -77,6 +77,7 @@ namespace Front_Endeavor.Controllers
             //Build a list of PostViewModels and add to the view model
             workspaceViewModel.Posts = await _context.Post
                 .Where(p => p.WorkspaceId == id)
+                .Include(p => p.ApplicationUser)
                 .Select(p => new PostViewModel()
                 {
                     Id = p.Id,
@@ -84,6 +85,7 @@ namespace Front_Endeavor.Controllers
                     ImageFile = p.ImageFile,
                     Link = p.Link,
                     ApplicationUserId = p.ApplicationUserId,
+                    ApplicationUser = p.ApplicationUser,
                     Timestamp = p.Timestamp,
                     Pinned = p.Pinned,
                     Comments = _context.Comment.Where(c => c.PostId == p.Id).Include(c => c.ApplicationUser).OrderBy(c => c.Timestamp).ToList(),
