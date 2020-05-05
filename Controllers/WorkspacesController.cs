@@ -31,7 +31,7 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: Workspaces/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id, string searchString)
         {
             //Find the workspace matching the id passed in
             var workspace = await _context.Workspace
@@ -44,7 +44,8 @@ namespace Front_Endeavor.Controllers
                 Name = workspace.Name,
                 Color1 = workspace.Color1,
                 Color2 = workspace.Color2,
-                Color3 = workspace.Color3
+                Color3 = workspace.Color3,
+                SearchResults = new List<ApplicationUser>()
             };
 
             if (!String.IsNullOrEmpty(workspace.Description))
@@ -65,6 +66,14 @@ namespace Front_Endeavor.Controllers
             if (!String.IsNullOrEmpty(workspace.MockupDiagram))
             {
                 workspaceViewModel.MockupDiagram = workspace.MockupDiagram;
+            }
+
+            //Store search results in SearchResults list of app users
+            var allUsers = await _context.ApplicationUser.ToListAsync();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                workspaceViewModel.SearchResults = allUsers.Where(au => au.Email.Contains(searchString)).ToList();
             }
 
             //Get a list of UserWorkspaces that are a part of the workspace and add to the view model

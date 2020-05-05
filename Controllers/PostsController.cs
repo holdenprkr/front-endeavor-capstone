@@ -79,7 +79,7 @@ namespace Front_Endeavor.Controllers
                 _context.Post.Add(postInstance);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Details", "Workspaces", new { id = postViewModel.WorkspaceId });
+                return NoContent();
             }
             catch
             {
@@ -110,32 +110,17 @@ namespace Front_Endeavor.Controllers
             }
         }
 
-        // GET: Posts/Delete/5
-        public async Task<ActionResult> Delete(int id)
-        {
-            var post = await _context.Post.FirstOrDefaultAsync(p => p.Id == id);
-
-            var loggedInUser = await GetCurrentUserAsync();
-
-            if (post.ApplicationUserId != loggedInUser.Id)
-            {
-                return NotFound();
-            }
-
-            return RedirectToAction("Details", "Workspaces", new { id = post.WorkspaceId });
-        }
-
         // POST: Posts/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, Post post)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
+                var post = _context.Post.FirstOrDefault(p => p.Id == id);
                 _context.Post.Remove(post);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Details", "Workspaces", new { id = post.WorkspaceId });
+                return NoContent();
             }
             catch
             {
