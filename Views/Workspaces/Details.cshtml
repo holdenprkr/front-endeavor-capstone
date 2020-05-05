@@ -11,8 +11,23 @@
         <div class="col-md-3">
             @if (Model.UserWorkspaces.FirstOrDefault(uw => uw.ApplicationUserId == UserManager.GetUserAsync(User).Result.Id).DevLead)
             {
-                <button class="btn btn-primary mb-lg-3 mt-1 p-3" data-toggle="modal" data-target="#userSearchModal" type="button">Add Users to Your Team</button>
-                <div id="userSearchModal" class="modal fade" role="dialog">
+                @*<button class="btn btn-primary mb-lg-3 mt-1 p-3" data-toggle="modal" data-target="#userSearchModal" type="button">Add Users to Your Team</button>*@
+                <div class="modal-body">
+                    @*Search for users by email*@
+                    <form asp-action="Details" asp-route-id="@Model.Id">
+                        <label class="control-label text-left mb-3 font-weight-normal text-lg-center w-100" style="font-size: 18px;">Search for users by Email:</label>
+                        <input type="text" name="SearchString" class="form-control form-inline w-100 mb-2">
+                        <input type="submit" value="Search" class="btn btn-primary btn-sm" />
+                    </form>
+                    @if (Model.SearchResults.Count > 0)
+                    {
+                        @foreach (var result in Model.SearchResults)
+                        {
+                            <div>@result.FirstName @result.LastName</div>
+                        }
+                    }
+                </div>
+                @*<div id="userSearchModal" class="modal fade" role="dialog">
                     <div class="modal-dialog">
 
                         <!-- Modal content-->
@@ -22,8 +37,8 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                @*Search for users by email*@
-                                <form action="Details" method="post">
+                              
+                                <form asp-action="Details" asp-route-id="@Model.Id">
                                     <input type="text" name="SearchString" class="form-control form-inline w-25">
                                     <input type="submit" value="Search" />
                                 </form>
@@ -41,7 +56,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div>*@
             }
             @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
             {
