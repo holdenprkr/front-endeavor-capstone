@@ -25,5 +25,7 @@ namespace Front_Endeavor.Models.ViewModels
         public string Color3 { get; set; }
         public List<UserWorkspace> UserWorkspaces { get; set; }
         public List<PostViewModel> Posts { get; set; }
+        public List<ApplicationUser> SearchResults { get; set; }
+        public PostViewModel PostViewModel { get; set;}
     }
 }

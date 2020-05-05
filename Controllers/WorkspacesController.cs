@@ -31,68 +31,89 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: Workspaces/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id, string searchString)
         {
-            //Find the workspace matching the id passed in
-            var workspace = await _context.Workspace
-                .FirstOrDefaultAsync(w => w.Id == id);
-
-            //Build a WorkspaceViewModel
-            var workspaceViewModel = new WorkspaceViewModel()
+            try
             {
-                Id = id,
-                Name = workspace.Name,
-                Color1 = workspace.Color1,
-                Color2 = workspace.Color2,
-                Color3 = workspace.Color3
-            };
+                //Find the workspace matching the id passed in
+                var workspace = await _context.Workspace
+                    .FirstOrDefaultAsync(w => w.Id == id);
 
-            if (!String.IsNullOrEmpty(workspace.Description))
-            {
-                workspaceViewModel.Description = workspace.Description;
-            }
 
-            if (!String.IsNullOrEmpty(workspace.GithubRepo))
-            {
-                workspaceViewModel.GithubRepo = workspace.GithubRepo;
-            }
-
-            if (!String.IsNullOrEmpty(workspace.DataRelatDiagram))
-            {
-                workspaceViewModel.DataRelatDiagram = workspace.DataRelatDiagram;
-            }
-
-            if (!String.IsNullOrEmpty(workspace.MockupDiagram))
-            {
-                workspaceViewModel.MockupDiagram = workspace.MockupDiagram;
-            }
-
-            //Get a list of UserWorkspaces that are a part of the workspace and add to the view model
-            workspaceViewModel.UserWorkspaces = await _context.UserWorkspace
-                .Where(uw => uw.WorkspaceId == id)
-                .Include(uw => uw.ApplicationUser)
-                .ToListAsync();
-
-            //Get a list of all the posts made in the workspace
-            //Build a list of PostViewModels and add to the view model
-            workspaceViewModel.Posts = await _context.Post
-                .Where(p => p.WorkspaceId == id)
-                .Include(p => p.ApplicationUser)
-                .Select(p => new PostViewModel()
+                var allUsers = await _context.ApplicationUser.ToListAsync();
+                //Build a WorkspaceViewModel
+                var workspaceViewModel = new WorkspaceViewModel()
                 {
-                    Id = p.Id,
-                    Text = p.Text,
-                    ImageFile = p.ImageFile,
-                    Link = p.Link,
-                    ApplicationUserId = p.ApplicationUserId,
-                    ApplicationUser = p.ApplicationUser,
-                    Timestamp = p.Timestamp,
-                    Pinned = p.Pinned,
-                    Comments = _context.Comment.Where(c => c.PostId == p.Id).Include(c => c.ApplicationUser).OrderBy(c => c.Timestamp).ToList(),
-                    Likes = _context.Like.Where(l => l.PostId == p.Id).ToList()
-                }).ToListAsync();
+                    Id = id,
+                    Name = workspace.Name,
+                    Color1 = workspace.Color1,
+                    Color2 = workspace.Color2,
+                    Color3 = workspace.Color3
+                };
 
-            return View(workspaceViewModel);
+                //Store search results in SearchResults list of app users
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    workspaceViewModel.SearchResults = allUsers.Where(au => au.Email.Contains(searchString)).ToList();
+                }
+                else
+                {
+                    workspaceViewModel.SearchResults = new List<ApplicationUser>();
+                }
+
+                if (!String.IsNullOrEmpty(workspace.Description))
+                {
+                    workspaceViewModel.Description = workspace.Description;
+                }
+
+                if (!String.IsNullOrEmpty(workspace.GithubRepo))
+                {
+                    workspaceViewModel.GithubRepo = workspace.GithubRepo;
+                }
+
+                if (!String.IsNullOrEmpty(workspace.DataRelatDiagram))
+                {
+                    workspaceViewModel.DataRelatDiagram = workspace.DataRelatDiagram;
+                }
+
+                if (!String.IsNullOrEmpty(workspace.MockupDiagram))
+                {
+                    workspaceViewModel.MockupDiagram = workspace.MockupDiagram;
+                }
+
+                
+
+                //Get a list of UserWorkspaces that are a part of the workspace and add to the view model
+                workspaceViewModel.UserWorkspaces = await _context.UserWorkspace
+                    .Where(uw => uw.WorkspaceId == id)
+                    .Include(uw => uw.ApplicationUser)
+                    .ToListAsync();
+
+                //Get a list of all the posts made in the workspace
+                //Build a list of PostViewModels and add to the view model
+                workspaceViewModel.Posts = await _context.Post
+                    .Where(p => p.WorkspaceId == id)
+                    .Include(p => p.ApplicationUser)
+                    .Select(p => new PostViewModel()
+                    {
+                        Id = p.Id,
+                        Text = p.Text,
+                        ImageFile = p.ImageFile,
+                        Link = p.Link,
+                        ApplicationUserId = p.ApplicationUserId,
+                        ApplicationUser = p.ApplicationUser,
+                        Timestamp = p.Timestamp,
+                        Pinned = p.Pinned,
+                        Comments = _context.Comment.Where(c => c.PostId == p.Id).Include(c => c.ApplicationUser).OrderBy(c => c.Timestamp).ToList(),
+                        Likes = _context.Like.Where(l => l.PostId == p.Id).ToList()
+                    }).ToListAsync();
+
+                return View(workspaceViewModel);
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
         }
 
         // GET: Workspaces/Create
