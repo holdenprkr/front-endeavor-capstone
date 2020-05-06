@@ -17,6 +17,42 @@ allDeleteButtons.forEach(db => {
     })
 })
 
+const searchButton = document.getElementById("userSearchButton")
+
+const findListOfUsers = () => {
+    
+    const allAddUserButtons = document.querySelectorAll(".addUserButton");
+    console.log(allAddUserButtons)
+    allAddUserButtons.forEach(aub => {
+        aub.addEventListener("click", async e => {
+    var userObj;
+            console.log("add button clicked")
+            const [a, spaceId, userId] = e.target.id.split("--");
+            await fetch(`/UserWorkspaces/CreateTeam/?workspaceId=${spaceId}&userId=${userId}`, {
+                method: "Post",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => res.json())
+                .then(data => userObj = data)
+                .then(() => console.log(userObj));
+
+            const addedUser = document.getElementById(`user--${userId}`);
+            addedUser.remove();
+
+            const contentTarget = document.getElementById("teamList")
+            contentTarget.innerHTML += 
+            `
+            <li class="mb-2"><h5 class="font-weight-normal">${userObj.firstName} ${userObj.lastName}</h5></li>
+            `
+        })
+    });
+}
+
+findListOfUsers();
+
+
 //const submitButton = document.getElementById("Submit");
 
 //submitButton.addEventListener("click", async e => {

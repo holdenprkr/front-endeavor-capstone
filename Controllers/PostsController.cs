@@ -79,7 +79,7 @@ namespace Front_Endeavor.Controllers
                 _context.Post.Add(postInstance);
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                return RedirectToAction("Details", "Workspaces", new { id = postViewModel.WorkspaceId });
             }
             catch
             {

@@ -12,19 +12,25 @@
             @if (Model.UserWorkspaces.FirstOrDefault(uw => uw.ApplicationUserId == UserManager.GetUserAsync(User).Result.Id).DevLead)
             {
                 @*<button class="btn btn-primary mb-lg-3 mt-1 p-3" data-toggle="modal" data-target="#userSearchModal" type="button">Add Users to Your Team</button>*@
-                <div class="modal-body">
+                <div>
                     @*Search for users by email*@
-                    <form asp-action="Details" asp-route-id="@Model.Id">
-                        <label class="control-label text-left mb-3 font-weight-normal text-lg-center w-100" style="font-size: 18px;">Search for users by Email:</label>
+                    <form asp-action="Details" asp-route-id="@Model.Id" class="mb-2">
+                        <label class="control-label text-left text-lg-center mb-0" style="font-size: 22px;">Search for users by Email:</label>
                         <input type="text" name="SearchString" class="form-control form-inline w-100 mb-2">
-                        <input type="submit" value="Search" class="btn btn-primary btn-sm" />
+                        <input type="submit" value="Search" class="btn btn-primary btn-sm" id="userSearchButton"/>
                     </form>
                     @if (Model.SearchResults.Count > 0)
                     {
-                        @foreach (var result in Model.SearchResults)
-                        {
-                            <div>@result.FirstName @result.LastName</div>
-                        }
+                        <ul>
+                            @foreach (var result in Model.SearchResults)
+                            {
+                                <li id="user--@result.Id">@result.FirstName @result.LastName <button class="btn btn-outline-secondary btn-sm addUserButton" id="Add--@Model.Id--@result.Id">Add</button></li>
+                            }
+                        </ul>
+                    }
+                    else if (Model.SearchResults.Count > 3)
+                    {
+                        <p>There are too many results! Please better specify your search.</p>
                     }
                 </div>
                 @*<div id="userSearchModal" class="modal fade" role="dialog">
@@ -80,7 +86,7 @@
             }
             <div>
                 <h4 class="mb-3 font-weight-normal">Team Members</h4>
-                <ul class="text-left">
+                <ul class="text-left" id="teamList">
                     @foreach (var teammate in Model.UserWorkspaces)
                     {
                         if (teammate.DevLead)
@@ -143,11 +149,7 @@
                                     {
                                         <div class="text-right">
                                             <button class="btn btn-outline-success btn-sm">Edit</button>
-                                            <form asp-action="Delete" asp-controller="Posts" method="post">
-                                                <input type="hidden" asp-for="@post.WorkspaceId" value="@Model.Id" />
-                                                <input type="hidden" asp-for="@post.Id" />
-                                                <input type="submit" value="Delete" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id" />
-                                            </form>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id">Delete</button>
                                         </div>
                                     }
                                 </div>
@@ -166,7 +168,7 @@
                 </div>
             </div>
             <div class="postInputForm">
-                <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75">
+                <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75" style="margin:0 auto;">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" />
@@ -198,21 +200,3 @@
     </div>
 </div>
 <script src="~/js/WorkspaceJS.js"></script>
-@*<script type="text/javascript">
-    const submitButton = document.getElementById("Submit");
-
-    submitButton.addEventListener("click", async e => {
-    var postView = JSON.parse('@Html.Raw(Model.PostViewModel)');
-    console.log(postView)
-        console.log("buttonClicked")
-        e.preventDefault();
-        fetch("/Posts/Create", {
-            method: "Post",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(postView)
-        })
-        fetch(`/Workspaces/Details/${@(Model.Id)}`)
-    })
-</script>*@
