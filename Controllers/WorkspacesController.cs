@@ -31,16 +31,14 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: Workspaces/Details/5
-        public async Task<ActionResult> Details(int id, string searchString)
+        public async Task<ActionResult> Details(int id, string searchString, [FromRoute]string userId)
         {
             try
             {
                 //Find the workspace matching the id passed in
                 var workspace = await _context.Workspace
                     .FirstOrDefaultAsync(w => w.Id == id);
-
-
-                var allUsers = await _context.ApplicationUser.ToListAsync();
+                
                 //Build a WorkspaceViewModel
                 var workspaceViewModel = new WorkspaceViewModel()
                 {
@@ -50,16 +48,6 @@ namespace Front_Endeavor.Controllers
                     Color2 = workspace.Color2,
                     Color3 = workspace.Color3
                 };
-
-                //Store search results in SearchResults list of app users
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    workspaceViewModel.SearchResults = allUsers.Where(au => au.Email.Contains(searchString)).ToList();
-                }
-                else
-                {
-                    workspaceViewModel.SearchResults = new List<ApplicationUser>();
-                }
 
                 if (!String.IsNullOrEmpty(workspace.Description))
                 {
@@ -81,13 +69,42 @@ namespace Front_Endeavor.Controllers
                     workspaceViewModel.MockupDiagram = workspace.MockupDiagram;
                 }
 
-                
-
                 //Get a list of UserWorkspaces that are a part of the workspace and add to the view model
                 workspaceViewModel.UserWorkspaces = await _context.UserWorkspace
                     .Where(uw => uw.WorkspaceId == id)
                     .Include(uw => uw.ApplicationUser)
                     .ToListAsync();
+
+                if (!String.IsNullOrEmpty(userId))
+                {
+                    var userWorkspace = new UserWorkspace
+                    {
+                        ApplicationUserId = userId,
+                        WorkspaceId = id,
+                        DevLead = false
+                    };
+
+                    workspaceViewModel.UserWorkspaces.Add(userWorkspace);
+                }
+
+                var user = await GetCurrentUserAsync();
+
+                var allUsers = await _context.ApplicationUser.ToListAsync();
+
+                var teamMemberIds = workspaceViewModel.UserWorkspaces.Select(uw => uw.ApplicationUserId).ToArray();
+
+                //Store search results in SearchResults list of app users
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    workspaceViewModel.SearchResults = allUsers
+                        .Where(au => au.Id != user.Id)
+                        .Where(au => !teamMemberIds.Contains(au.Id))
+                        .Where(au => au.Email.Contains(searchString)).ToList();
+                }
+                else
+                {
+                    workspaceViewModel.SearchResults = new List<ApplicationUser>();
+                }
 
                 //Get a list of all the posts made in the workspace
                 //Build a list of PostViewModels and add to the view model

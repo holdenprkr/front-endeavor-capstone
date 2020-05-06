@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Front_Endeavor.Data;
 using Front_Endeavor.Models;
+using Front_Endeavor.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,28 +36,46 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: UserWorkspaces/Create
-        public async Task<ActionResult> Create(string searchString)
-        {
-            var allUsers = await _context.ApplicationUser.ToListAsync();
-            
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                allUsers = allUsers.Where(au => au.Email.Contains(searchString)).ToList();
-            }
-            
-            return NoContent();
-        }
+        //public async Task<ActionResult> Create(string searchString)
+        //{
+        //    var allUsers = await _context.ApplicationUser.ToListAsync();
+
+        //    if (!String.IsNullOrEmpty(searchString))
+        //    {
+        //        allUsers = allUsers.Where(au => au.Email.Contains(searchString)).ToList();
+        //    }
+
+        //    return NoContent();
+        //}
 
         // POST: UserWorkspaces/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateTeam([FromQuery] int workspaceId, [FromQuery]string userId)
         {
             try
             {
-                // TODO: Add insert logic here
+                var userWorkspace = new UserWorkspace
+                {
+                    ApplicationUserId = userId,
+                    WorkspaceId = workspaceId,
+                    DevLead = false
+                };
 
-                return RedirectToAction(nameof(Index));
+                _context.UserWorkspace.Add(userWorkspace);
+                await _context.SaveChangesAsync();
+
+                var foundUser = await _context.ApplicationUser
+                    .FindAsync(userId);
+
+                var applicationUserViewModel = new ApplicationUserViewModel
+                {
+                    Id = foundUser.Id,
+                    FirstName = foundUser.FirstName,
+                    LastName = foundUser.LastName,
+                    Email = foundUser.Email
+                };
+
+                return Ok(applicationUserViewModel);
             }
             catch
             {
