@@ -6,17 +6,16 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="text-center">
+<div class="text-center p-5" style="border-right: 3px inset @Model.Color1; border-bottom: 3px inset @Model.Color1; border-radius: 1%; isolation: isolate;" >
     <div class="row">
         <div class="col-md-3">
             @if (Model.UserWorkspaces.FirstOrDefault(uw => uw.ApplicationUserId == UserManager.GetUserAsync(User).Result.Id).DevLead)
             {
-                @*<button class="btn btn-primary mb-lg-3 mt-1 p-3" data-toggle="modal" data-target="#userSearchModal" type="button">Add Users to Your Team</button>*@
-                <div>
+                <div class="mb-2">
                     @*Search for users by email*@
                     <form asp-action="Details" asp-route-id="@Model.Id" class="mb-2">
-                        <label class="control-label text-left text-lg-center mb-0" style="font-size: 22px;">Search for users by Email:</label>
-                        <input type="text" name="SearchString" class="form-control form-inline w-100 mb-2">
+                        <label class="control-label text-left text-lg-center mb-0" style="font-size: 20px;" id="searchUserLabel">Search Users by Email:</label>
+                        <input type="text" name="SearchString" class="form-control form-inline w-100 mb-2 rounded">
                         <input type="submit" value="Search" class="btn btn-primary btn-sm" id="userSearchButton"/>
                     </form>
                     @if (Model.SearchResults.Count > 0)
@@ -24,7 +23,7 @@
                         <ul>
                             @foreach (var result in Model.SearchResults)
                             {
-                                <li id="user--@result.Id">@result.FirstName @result.LastName <button class="btn btn-outline-secondary btn-sm addUserButton" id="Add--@Model.Id--@result.Id">Add</button></li>
+                                <li class="text-left" id="user--@result.Id">@result.FirstName @result.LastName <button class="btn btn-outline-secondary btn-sm addUserButton" id="Add--@Model.Id--@result.Id">Add</button></li>
                             }
                         </ul>
                     }
@@ -33,40 +32,10 @@
                         <p>There are too many results! Please better specify your search.</p>
                     }
                 </div>
-                @*<div id="userSearchModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Search for users by e-mail</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                              
-                                <form asp-action="Details" asp-route-id="@Model.Id">
-                                    <input type="text" name="SearchString" class="form-control form-inline w-25">
-                                    <input type="submit" value="Search" />
-                                </form>
-                                @if (Model.SearchResults.Count > 0)
-                                {
-                                    @foreach (var result in Model.SearchResults)
-                                    {
-                                        <div>@result.FirstName @result.LastName</div>
-                                    }
-                                }
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>*@
             }
             @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
             {
-                <div>
+                <div class="rounded p-1 mb-2 bg-light" style="border-bottom: 3px inset @Model.Color3; border-right: 3px inset @Model.Color3;">
                     <h4 class="mb-3 font-weight-normal">Project Links:</h4>
                     <ul class="text-left">
                         @if (!String.IsNullOrEmpty(Model.GithubRepo))
@@ -75,16 +44,16 @@
                         }
                         @if (!String.IsNullOrEmpty(Model.DataRelatDiagram))
                         {
-                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.DataRelatDiagram" target="_blank">Data Relationship Diagram</a></h5></li>
+                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.DataRelatDiagram" target="_blank">Data Relationship</a></h5></li>
                         }
                         @if (!String.IsNullOrEmpty(Model.MockupDiagram))
                         {
-                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.MockupDiagram" target="_blank">Mockup Diagram</a></h5></li>
+                            <li class="mb-2"><h5 class="font-weight-normal"><a href="@Model.MockupDiagram" target="_blank">Mockup</a></h5></li>
                         }
                     </ul>
                 </div>
             }
-            <div>
+            <div class="rounded p-1 bg-primary text-light" style="border-left: 3px outset @Model.Color2; border-top: 3px outset @Model.Color2;">
                 <h4 class="mb-3 font-weight-normal">Team Members</h4>
                 <ul class="text-left" id="teamList">
                     @foreach (var teammate in Model.UserWorkspaces)
@@ -102,21 +71,21 @@
             </div>
         </div>
         <div class="col-md-9">
-            <div class="jumbotron jumbotron-fluid p-1 rounded">
+            <div class="jumbotron jumbotron-fluid p-1 rounded" id="jumboHeader" style="border-right: 3px inset @Model.Color1; border-bottom: 3px inset @Model.Color1;">
                 <div class="container text-left">
-                    <h6 class="display-4">@Model.Name</h6>
+                    <h6 class="display-4" style="color: @Model.Color2;">@Model.Name</h6>
                     @if (!String.IsNullOrEmpty(Model.Description))
                     {
-                        <p class="lead">@Model.Description</p>
+                        <p class="lead" style="color: @Model.Color3;">@Model.Description</p>
                     }
                 </div>
             </div>
-            <div class="rounded bg-primary">
-                <h3 class="font-weight-normal">Project idea board</h3>
-                <div class="d-inline-block overflow-auto bg-secondary rounded p-3" style="max-height: 750px; min-height: 150px; width: 85%;">
+            <div class="rounded mb-3 bg-light" id="messageBoard" style="border-right: 3px inset @Model.Color2; border-bottom: 3px inset @Model.Color2;">
+                @*<h3 class="font-weight-normal">Project idea board</h3>*@
+                <div class="d-inline-block overflow-auto rounded p-3 mt-3 mb-3" id="postingBoard" style="max-height: 750px; min-height: 150px; width: 85%;">
                     @if (Model.Posts.Count == 0)
                     {
-                        <div class="projectPost text-white">
+                        <div class="projectPost rounded">
                             Oh no! It looks like no one on your team has posted anything yet.
                             <br />
                             Why don't you break the ice?
@@ -126,9 +95,9 @@
                     {
                         @foreach (var post in Model.Posts)
                         {
-                            <div class="projectPost text-left mb-2" id="Post--@post.Id">
+                            <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
                                 @*image*@
-                                <div class="rounded bg-white p-2">
+                                <div class="rounded p-2"  style="border-right: 2.5px inset @Model.Color3; border-bottom: 2.5px inset @Model.Color3;">                                         
                                     @if (!String.IsNullOrEmpty(post.ImageFile))
                                     {
                                         <div class="text-center">
@@ -136,15 +105,15 @@
                                         </div>
                                     }
                                     @*text*@
-                                    <p class="mb-2">@post.Text</p>
+                                    <p class="mb-2 messageInputText">@post.Text</p>
 
                                     @*link*@
                                     @if (!String.IsNullOrEmpty(post.Link))
                                     {
-                                        <a href="@post.Link" target="_blank" class="mb-2">User Posted Link</a>
+                                        <a href="@post.Link" target="_blank" class="mb-2 messageInputText">User Posted Link</a>
                                     }
 
-                                    <p class="text-right mb-0">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
+                                    <p class="text-right mb-0 messageInputText">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
                                     @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
                                     {
                                         <div class="text-right">
@@ -167,36 +136,38 @@
                     }
                 </div>
             </div>
-            <div class="postInputForm">
-                <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75" style="margin:0 auto;">
+            <div class="postInputForm rounded p-3" style="border-top: 3px outset @Model.Color3; border-left: 3px outset @Model.Color3;">
+                <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75" style="margin:0 auto;" id="postBoardForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" />
+                    <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" id="inputWorkspaceId"/>
 
                     <div class="form-group">
-                        <label asp-for="@Model.PostViewModel.Text" class="control-label text-left">Text:</label>
-                        <textarea asp-for="@Model.PostViewModel.Text" class="form-control"></textarea>
+                        <label asp-for="@Model.PostViewModel.Text" class="control-label text-left postFormLabel">Text:</label>
+                        <textarea asp-for="@Model.PostViewModel.Text" class="form-control" id="inputText" ></textarea>
                         <span asp-validation-for="@Model.PostViewModel.Text" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="@Model.PostViewModel.Image" class="control-label text-left">Image Upload:</label>
-                        <input asp-for="@Model.PostViewModel.Image" class="form-control" type="file" />
+                        <label asp-for="@Model.PostViewModel.Image" class="control-label text-left postFormLabel">Image Upload:</label>
+                        <input asp-for="@Model.PostViewModel.Image" class="form-control" type="file" id="inputImage"/>
                         <span asp-validation-for="@Model.PostViewModel.Image" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="@Model.PostViewModel.Link" class="control-label text-left">Link:</label>
-                        <input asp-for="@Model.PostViewModel.Link" class="form-control" type="url" />
+                        <label asp-for="@Model.PostViewModel.Link" class="control-label text-left postFormLabel">Link:</label>
+                        <input asp-for="@Model.PostViewModel.Link" class="form-control" type="url" id="inputLink"/>
                         <span asp-validation-for="@Model.PostViewModel.Link" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <input id="Submit" type="submit" value="Submit" />
+                        <input id="Submit" type="button" value="Submit" />
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script src="~/js/WorkspaceJS.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.5/lib/darkmode-js.min.js"></script>
+<script src="~/js/WorkspaceJS.js" type="module"></script>
+
