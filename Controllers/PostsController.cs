@@ -44,7 +44,6 @@ namespace Front_Endeavor.Controllers
 
         // POST: Posts/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(PostViewModel postViewModel)
         {
             try
@@ -79,7 +78,28 @@ namespace Front_Endeavor.Controllers
                 _context.Post.Add(postInstance);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Details", "Workspaces", new { id = postViewModel.WorkspaceId });
+                var workspace = await _context.Workspace
+                    .FirstOrDefaultAsync(w => w.Id == postViewModel.WorkspaceId);
+
+                var postResponse = new PostResponseViewModel
+                {
+                    Id = postInstance.Id,
+                    Text = postViewModel.Text,
+                    ImageFile = postInstance.ImageFile,
+                    Link = postInstance.Link,
+                    ApplicationUserId = user.Id,
+                    WorkspaceId = postViewModel.WorkspaceId,
+                    Timestamp = postInstance.Timestamp,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Pinned = false,
+                    Color1 = workspace.Color1,
+                    Color2 = workspace.Color2,
+                    Color3 = workspace.Color3
+            };
+
+                //return RedirectToAction("Details", "Workspaces", new { id = postViewModel.WorkspaceId });
+                return Ok(postResponse);
             }
             catch
             {
