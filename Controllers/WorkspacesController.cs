@@ -200,21 +200,54 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: Workspaces/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var workspace = await _context.Workspace
+                .FirstOrDefaultAsync(w => w.Id == id);
+
+            return View(workspace);
         }
 
         // POST: Workspaces/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, Workspace workspace)
         {
             try
             {
-                // TODO: Add update logic here
+                var workspaceInstance = new Workspace()
+                {
+                    Id = id,
+                    Name = workspace.Name,
+                    Color1 = workspace.Color1,
+                    Color2 = workspace.Color2,
+                    Color3 = workspace.Color3
+                };
 
-                return RedirectToAction(nameof(Index));
+                if (!String.IsNullOrEmpty(workspace.Description))
+                {
+                    workspaceInstance.Description = workspace.Description;
+                }
+
+                if (!String.IsNullOrEmpty(workspace.GithubRepo))
+                {
+                    workspaceInstance.GithubRepo = workspace.GithubRepo;
+                }
+
+                if (!String.IsNullOrEmpty(workspace.DataRelatDiagram))
+                {
+                    workspaceInstance.DataRelatDiagram = workspace.DataRelatDiagram;
+                }
+
+                if (!String.IsNullOrEmpty(workspace.MockupDiagram))
+                {
+                    workspaceInstance.MockupDiagram = workspace.MockupDiagram;
+                }
+
+                _context.Workspace.Update(workspaceInstance);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Details", new { id = workspaceInstance.Id });
             }
             catch
             {
