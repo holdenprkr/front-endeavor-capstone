@@ -114,21 +114,69 @@ namespace Front_Endeavor.Controllers
         }
 
         // POST: Posts/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Edit(int id, PostViewModel postViewModel)
+        //{
+        //    try
+        //    {
+        //        var user = await GetCurrentUserAsync();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        var postInstance = new Post
+        //        {
+        //            Text = postViewModel.Text,
+        //            ApplicationUserId = user.Id,
+        //            WorkspaceId = postViewModel.WorkspaceId,
+        //            Timestamp = DateTime.Now,
+        //            Pinned = false
+        //        };
+
+        //        if (!String.IsNullOrEmpty(postViewModel.Link))
+        //        {
+        //            postInstance.Link = postViewModel.Link;
+        //        }
+
+        //        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images");
+        //        if (postViewModel.Image != null)
+        //        {
+        //            var fileName = Guid.NewGuid().ToString() + postViewModel.Image.FileName;
+        //            postInstance.ImageFile = fileName;
+        //            using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
+        //            {
+        //                await postViewModel.Image.CopyToAsync(fileStream);
+        //            }
+        //        }
+
+        //        _context.Post.Add(postInstance);
+        //        await _context.SaveChangesAsync();
+
+        //        var workspace = await _context.Workspace
+        //            .FirstOrDefaultAsync(w => w.Id == postViewModel.WorkspaceId);
+
+        //        var postResponse = new PostResponseViewModel
+        //        {
+        //            Id = postInstance.Id,
+        //            Text = postViewModel.Text,
+        //            ImageFile = postInstance.ImageFile,
+        //            Link = postInstance.Link,
+        //            ApplicationUserId = user.Id,
+        //            WorkspaceId = postViewModel.WorkspaceId,
+        //            Timestamp = postInstance.Timestamp,
+        //            FirstName = user.FirstName,
+        //            LastName = user.LastName,
+        //            Pinned = false,
+        //            Color1 = workspace.Color1,
+        //            Color2 = workspace.Color2,
+        //            Color3 = workspace.Color3
+        //        };
+
+        //        return Ok(postResponse)
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // POST: Posts/Delete/5
         [HttpPost]

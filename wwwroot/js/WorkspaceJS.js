@@ -4,7 +4,6 @@ let allDeleteButtons = document.querySelectorAll(".deleteButton");
 
 allDeleteButtons.forEach(db => {
     db.addEventListener("click", async e => {
-
         e.preventDefault();
         const [d, id] = e.target.id.split("--");
         await fetch(`/Posts/Delete/${id}`, {
@@ -19,7 +18,20 @@ allDeleteButtons.forEach(db => {
     })
 })
 
-const searchButton = document.getElementById("userSearchButton")
+let postEditButtons = document.querySelectorAll(".postEditButton")
+
+postEditButtons.forEach(eb => {
+    eb.addEventListener("click", async e => {
+        e.preventDefault();
+        const [edit, id] = e.target.id.split("--");
+        await fetch(`/Posts/Edit/${id}`, {
+            method: "Put",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    })
+})
 
 const findListOfUsers = () => {
     
@@ -146,7 +158,7 @@ var options = {
 const darkmode = new Darkmode(options);
 darkmode.showWidget();
 
-const element = document.querySelector(".darkmode-toggle");
+const darkSwitch = document.querySelector(".darkmode-toggle");
 
 const searchUserLabel = document.getElementById("searchUserLabel");
 const postFormLabels = Array.from(document.getElementsByClassName("postFormLabel"));
@@ -154,9 +166,15 @@ const messageBoard = document.getElementById("messageBoard");
 const messageInputTexts = Array.from(document.getElementsByClassName("messageInputText"));
 const jumboHeader = document.getElementById("jumboHeader");
 const navbar = navbarDetector();
+const teamMemberList = document.getElementById("teamMemberList");
+const userSearchButton = document.getElementById("userSearchButton");
+const projectLinkList = document.getElementById("projectLinkList");
+const userSearchResults = Array.from(document.getElementsByClassName("userSearchResult"));
+const addUserButtons = Array.from(document.getElementsByClassName("addUserButton"));
+const tooManyResultsAlert = document.getElementById("tooManyResults");
 
 const isDark = () => {
-    return element.classList.contains("darkmode-toggle--white")
+    return darkSwitch.classList.contains("darkmode-toggle--white")
 }
 
 if (isDark()) {
@@ -168,9 +186,23 @@ if (isDark()) {
     jumboHeader.classList.add("bg-dark");
     navbar.classList.remove("bg-primary");
     navbar.classList.add("bg-dark");
+    teamMemberList.classList.remove("bg-primary");
+    teamMemberList.classList.add("bg-dark");
+    submitButton.classList.remove("btn-primary");
+    submitButton.classList.add("btn-dark");
+    userSearchButton.classList.remove("btn-primary");
+    userSearchButton.classList.add("btn-dark");
+    projectLinkList.classList.remove("bg-light");
+    projectLinkList.classList.add("text-white", "bg-transparent");
+    userSearchResults.map(element => element.classList.add("text-white"));
+    addUserButtons.map(element => element.classList.remove("btn-outline-secondary"));
+    addUserButtons.map(element => element.classList.add("btn-outline-info"));
+    if (tooManyResultsAlert != null) {
+        tooManyResultsAlert.classList.add("text-white");
+    }
 }
 
-element.addEventListener("click", e => {
+darkSwitch.addEventListener("click", e => {
     if (isDark()) {
         searchUserLabel.classList.add("text-white");
         postFormLabels.map(element => element.classList.add("text-white"));
@@ -180,6 +212,20 @@ element.addEventListener("click", e => {
         jumboHeader.classList.add("bg-dark");
         navbar.classList.remove("bg-primary");
         navbar.classList.add("bg-dark");
+        teamMemberList.classList.remove("bg-primary");
+        teamMemberList.classList.add("bg-dark");
+        submitButton.classList.remove("btn-primary");
+        submitButton.classList.add("btn-dark");
+        userSearchButton.classList.remove("btn-primary");
+        userSearchButton.classList.add("btn-dark");
+        projectLinkList.classList.remove("bg-light");
+        projectLinkList.classList.add("text-white", "bg-transparent");
+        userSearchResults.map(element => element.classList.add("text-white"));
+        addUserButtons.map(element => element.classList.remove("btn-outline-secondary"));
+        addUserButtons.map(element => element.classList.add("btn-outline-info"));
+        if (tooManyResultsAlert != null) {
+            tooManyResultsAlert.classList.add("text-white");
+        }
     } else {
         searchUserLabel.classList.remove("text-white");
         postFormLabels.map(element => element.classList.remove("text-white"));
@@ -189,6 +235,20 @@ element.addEventListener("click", e => {
         jumboHeader.classList.remove("bg-dark");
         navbar.classList.remove("bg-dark");
         navbar.classList.add("bg-primary");
+        teamMemberList.classList.remove("bg-dark");
+        teamMemberList.classList.add("bg-primary");
+        submitButton.classList.remove("btn-dark");
+        submitButton.classList.add("btn-primary");
+        userSearchButton.classList.remove("btn-dark");
+        userSearchButton.classList.add("btn-primary");
+        projectLinkList.classList.remove("text-white", "bg-transparent");
+        projectLinkList.classList.add("bg-light");
+        userSearchResults.map(element => element.classList.remove("text-white"));
+        addUserButtons.map(element => element.classList.remove("btn-outline-info"));
+        addUserButtons.map(element => element.classList.add("btn-outline-secondary"));
+        if (tooManyResultsAlert != null) {
+            tooManyResultsAlert.classList.remove("text-white");
+        }
     }
-    console.log(element.classList.contains("darkmode-toggle--white"))
+    console.log(darkSwitch.classList.contains("darkmode-toggle--white"))
 })

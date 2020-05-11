@@ -16,26 +16,27 @@
                     <form asp-action="Details" asp-route-id="@Model.Id" class="mb-2">
                         <label class="control-label text-left text-lg-center mb-0" style="font-size: 20px;" id="searchUserLabel">Search Users by Email:</label>
                         <input type="text" name="SearchString" class="form-control form-inline w-100 mb-2 rounded">
-                        <input type="submit" value="Search" class="btn btn-primary btn-sm" id="userSearchButton"/>
+                        <input type="submit" value="Search" class="btn btn-primary btn-sm" id="userSearchButton" />
                     </form>
                     @if (Model.SearchResults.Count > 0)
                     {
                         <ul>
                             @foreach (var result in Model.SearchResults)
                             {
-                                <li class="text-left" id="user--@result.Id">@result.FirstName @result.LastName <button class="btn btn-outline-secondary btn-sm addUserButton" id="Add--@Model.Id--@result.Id">Add</button></li>
+                                <li class="text-left userSearchResult" id="user--@result.Id">@result.FirstName @result.LastName <button class="btn btn-outline-secondary btn-sm addUserButton" id="Add--@Model.Id--@result.Id">Add</button></li>
                             }
                         </ul>
                     }
                     else if (Model.SearchResults.Count > 3)
                     {
-                        <p>There are too many results! Please better specify your search.</p>
+                        <p id="tooManyResults">There are too many results! Please better specify your search.</p>
                     }
                 </div>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm mb-2">Edit Workspace</a>
             }
             @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
             {
-                <div class="rounded p-1 mb-2 bg-light" style="border-bottom: 3px inset @Model.Color3; border-right: 3px inset @Model.Color3;">
+                <div class="rounded p-1 mb-2 bg-light" id="projectLinkList" style="border-bottom: 3px inset @Model.Color3; border-right: 3px inset @Model.Color3;">
                     <h4 class="mb-3 font-weight-normal">Project Links:</h4>
                     <ul class="text-left">
                         @if (!String.IsNullOrEmpty(Model.GithubRepo))
@@ -53,7 +54,7 @@
                     </ul>
                 </div>
             }
-            <div class="rounded p-1 bg-primary text-light" style="border-left: 3px outset @Model.Color2; border-top: 3px outset @Model.Color2;">
+            <div class="rounded p-1 bg-primary text-light" style="border-left: 3px outset @Model.Color2; border-top: 3px outset @Model.Color2;" id="teamMemberList">
                 <h4 class="mb-3 font-weight-normal">Team Members</h4>
                 <ul class="text-left" id="teamList">
                     @foreach (var teammate in Model.UserWorkspaces)
@@ -117,7 +118,7 @@
                                     @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
                                     {
                                         <div class="text-right">
-                                            <button class="btn btn-outline-success btn-sm">Edit</button>
+                                            <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--@post.Id">Edit</button>
                                             <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id">Delete</button>
                                         </div>
                                     }
@@ -161,7 +162,7 @@
                     </div>
 
                     <div class="form-group">
-                        <input id="Submit" type="button" value="Submit" />
+                        <input id="Submit" type="button" value="Submit" class="btn btn-primary" />
                     </div>
                 </form>
             </div>

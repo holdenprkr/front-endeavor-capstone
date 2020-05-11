@@ -1,17 +1,18 @@
 ﻿@model Front_Endeavor.Models.Workspace
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>Workspace</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Project Name</label>
                 <input asp-for="Name" class="form-control" />
@@ -39,28 +40,28 @@
             </div>
             <div class="form-group w-50">
                 <label asp-for="Color1" class="control-label">Primary Color</label>
-                <input asp-for="Color1" class="form-control" type="color"/>
+                <input asp-for="Color1" class="form-control" type="color" />
                 <span asp-validation-for="Color1" class="text-danger"></span>
             </div>
             <div class="form-group w-50">
                 <label asp-for="Color2" class="control-label">Secondary Color</label>
-                <input asp-for="Color2" class="form-control" type="color"/>
+                <input asp-for="Color2" class="form-control" type="color" />
                 <span asp-validation-for="Color2" class="text-danger"></span>
             </div>
             <div class="form-group w-50">
                 <label asp-for="Color3" class="control-label">Tertiary Color</label>
-                <input asp-for="Color3" class="form-control" type="color"/>
+                <input asp-for="Color3" class="form-control" type="color" />
                 <span asp-validation-for="Color3" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" asp-controller="Home">Back to Home page</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
