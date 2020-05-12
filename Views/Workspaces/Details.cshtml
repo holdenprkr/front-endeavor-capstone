@@ -6,7 +6,10 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="text-center p-5" style="border-right: 3px inset @Model.Color1; border-bottom: 3px inset @Model.Color1; border-radius: 1%; isolation: isolate;" >
+<div class="text-center p-5" style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                box-shadow: 3px 3px 4px 0px @Model.Color1; border-radius: 1%; isolation: isolate;" >
     <div class="row">
         <div class="col-md-3">
             @if (Model.UserWorkspaces.FirstOrDefault(uw => uw.ApplicationUserId == UserManager.GetUserAsync(User).Result.Id).DevLead)
@@ -32,11 +35,14 @@
                         <p id="tooManyResults">There are too many results! Please better specify your search.</p>
                     }
                 </div>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm mb-2">Edit Workspace</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm mb-2" id="editWorkspaceButton">Edit Workspace</a>
             }
             @if (!String.IsNullOrEmpty(Model.GithubRepo) || !String.IsNullOrEmpty(Model.DataRelatDiagram) || !String.IsNullOrEmpty(Model.MockupDiagram))
             {
-                <div class="rounded p-1 mb-2 bg-light" id="projectLinkList" style="border-bottom: 3px inset @Model.Color3; border-right: 3px inset @Model.Color3;">
+                <div class="rounded p-1 mb-2 bg-light" id="projectLinkList" style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                box-shadow: 3px 3px 4px 0px @Model.Color3;">
                     <h4 class="mb-3 font-weight-normal">Project Links:</h4>
                     <ul class="text-left">
                         @if (!String.IsNullOrEmpty(Model.GithubRepo))
@@ -54,7 +60,10 @@
                     </ul>
                 </div>
             }
-            <div class="rounded p-1 bg-primary text-light" style="border-left: 3px outset @Model.Color2; border-top: 3px outset @Model.Color2;" id="teamMemberList">
+            <div class="rounded p-1 bg-primary text-light" style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color2;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color2;
+                box-shadow: 3px 3px 4px 0px @Model.Color2;" id="teamMemberList">
                 <h4 class="mb-3 font-weight-normal">Team Members</h4>
                 <ul class="text-left" id="teamList">
                     @foreach (var teammate in Model.UserWorkspaces)
@@ -72,7 +81,10 @@
             </div>
         </div>
         <div class="col-md-9">
-            <div class="jumbotron jumbotron-fluid p-1 rounded" id="jumboHeader" style="border-right: 3px inset @Model.Color1; border-bottom: 3px inset @Model.Color1;">
+            <div class="jumbotron jumbotron-fluid p-1 rounded" id="jumboHeader" style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                box-shadow: 3px 3px 4px 0px @Model.Color1;">
                 <div class="container text-left">
                     <h6 class="display-4" style="color: @Model.Color2;">@Model.Name</h6>
                     @if (!String.IsNullOrEmpty(Model.Description))
@@ -81,7 +93,10 @@
                     }
                 </div>
             </div>
-            <div class="rounded mb-3 bg-light" id="messageBoard" style="border-right: 3px inset @Model.Color2; border-bottom: 3px inset @Model.Color2;">
+            <div class="rounded mb-3 bg-light" id="messageBoard" style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color2;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color2;
+                box-shadow: 3px 3px 4px 0px @Model.Color2;">
                 @*<h3 class="font-weight-normal">Project idea board</h3>*@
                 <div class="d-inline-block overflow-auto rounded p-3 mt-3 mb-3" id="postingBoard" style="max-height: 750px; min-height: 150px; width: 85%;">
                     @if (Model.Posts.Count == 0)
@@ -98,7 +113,10 @@
                         {
                             <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
                                 @*image*@
-                                <div class="rounded p-2"  style="border-right: 2.5px inset @Model.Color3; border-bottom: 2.5px inset @Model.Color3;">                                         
+                                <div class="rounded p-2"  style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                box-shadow: 3px 3px 4px 0px @Model.Color3;">                                         
                                     @if (!String.IsNullOrEmpty(post.ImageFile))
                                     {
                                         <div class="text-center">
@@ -137,10 +155,14 @@
                     }
                 </div>
             </div>
-            <div class="postInputForm rounded p-3" style="border-top: 3px outset @Model.Color3; border-left: 3px outset @Model.Color3;">
+            <div class="postInputForm rounded p-3" 
+                 style="border: 1px solid black;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                box-shadow: 3px 3px 4px 0px @Model.Color3;">
                 <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75" style="margin:0 auto;" id="postBoardForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                    
                     <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" id="inputWorkspaceId"/>
 
                     <div class="form-group">
@@ -163,6 +185,7 @@
 
                     <div class="form-group">
                         <input id="Submit" type="button" value="Submit" class="btn btn-primary" />
+                        <input id="Update" type="hidden" value="Update" class="btn btn-primary" />
                     </div>
                 </form>
             </div>

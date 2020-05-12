@@ -25,9 +25,12 @@ namespace Front_Endeavor.Controllers
         }
 
         // GET: Posts
-        public ActionResult Index()
+        public async Task<ActionResult> Index(int id)
         {
-            return View();
+            var foundPost = await _context.Post
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return Ok(foundPost);
         }
 
         // GET: Posts/Details/5
@@ -113,70 +116,87 @@ namespace Front_Endeavor.Controllers
             return View();
         }
 
-        // POST: Posts/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Edit(int id, PostViewModel postViewModel)
-        //{
-        //    try
-        //    {
-        //        var user = await GetCurrentUserAsync();
+        //POST: Posts/Edit/5
+        [HttpPut]
+        public async Task<ActionResult> Edit(int id, PostViewModel postViewModel)
+        {
+            try
+            {
+                var user = await GetCurrentUserAsync();
 
-        //        var postInstance = new Post
-        //        {
-        //            Text = postViewModel.Text,
-        //            ApplicationUserId = user.Id,
-        //            WorkspaceId = postViewModel.WorkspaceId,
-        //            Timestamp = DateTime.Now,
-        //            Pinned = false
-        //        };
+                var foundPost = await _context.Post
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
-        //        if (!String.IsNullOrEmpty(postViewModel.Link))
-        //        {
-        //            postInstance.Link = postViewModel.Link;
-        //        }
+                var postInstance = new Post();
 
-        //        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images");
-        //        if (postViewModel.Image != null)
-        //        {
-        //            var fileName = Guid.NewGuid().ToString() + postViewModel.Image.FileName;
-        //            postInstance.ImageFile = fileName;
-        //            using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
-        //            {
-        //                await postViewModel.Image.CopyToAsync(fileStream);
-        //            }
-        //        }
+                if (postViewModel.Image == null)
+                {
+                    postInstance.Id = id;
+                    postInstance.Text = postViewModel.Text;
+                    postInstance.ApplicationUserId = user.Id;
+                    postInstance.WorkspaceId = postViewModel.WorkspaceId;
+                    postInstance.ImageFile = foundPost.ImageFile;
+                    postInstance.Timestamp = foundPost.Timestamp;
+                    postInstance.Pinned = false;
+                }
+                else
+                {
+                    postInstance.Id = id;
+                    postInstance.Text = postViewModel.Text;
+                    postInstance.ApplicationUserId = user.Id;
+                    postInstance.WorkspaceId = postViewModel.WorkspaceId;
+                    postInstance.Timestamp = foundPost.Timestamp;
+                    postInstance.Pinned = false;
+                }
 
-        //        _context.Post.Add(postInstance);
-        //        await _context.SaveChangesAsync();
 
-        //        var workspace = await _context.Workspace
-        //            .FirstOrDefaultAsync(w => w.Id == postViewModel.WorkspaceId);
+                if (!String.IsNullOrEmpty(postViewModel.Link))
+                {
+                    postInstance.Link = postViewModel.Link;
+                }
 
-        //        var postResponse = new PostResponseViewModel
-        //        {
-        //            Id = postInstance.Id,
-        //            Text = postViewModel.Text,
-        //            ImageFile = postInstance.ImageFile,
-        //            Link = postInstance.Link,
-        //            ApplicationUserId = user.Id,
-        //            WorkspaceId = postViewModel.WorkspaceId,
-        //            Timestamp = postInstance.Timestamp,
-        //            FirstName = user.FirstName,
-        //            LastName = user.LastName,
-        //            Pinned = false,
-        //            Color1 = workspace.Color1,
-        //            Color2 = workspace.Color2,
-        //            Color3 = workspace.Color3
-        //        };
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images");
+                if (postViewModel.Image != null)
+                {
+                    var fileName = Guid.NewGuid().ToString() + postViewModel.Image.FileName;
+                    postInstance.ImageFile = fileName;
+                    using (var fileStream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
+                    {
+                        await postViewModel.Image.CopyToAsync(fileStream);
+                    }
+                }
 
-        //        return Ok(postResponse)
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+                _context.Post.Update(postInstance);
+                await _context.SaveChangesAsync();
+
+                var workspace = await _context.Workspace
+                    .FirstOrDefaultAsync(w => w.Id == postViewModel.WorkspaceId);
+
+                var postResponse = new PostResponseViewModel
+                {
+                    Id = id,
+                    Text = postViewModel.Text,
+                    ImageFile = postInstance.ImageFile,
+                    Link = postInstance.Link,
+                    ApplicationUserId = user.Id,
+                    WorkspaceId = postViewModel.WorkspaceId,
+                    Timestamp = postInstance.Timestamp,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Pinned = false,
+                    Color1 = workspace.Color1,
+                    Color2 = workspace.Color2,
+                    Color3 = workspace.Color3
+                };
+
+                return Ok(postResponse);
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
 
         // POST: Posts/Delete/5
         [HttpPost]
