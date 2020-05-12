@@ -10,6 +10,7 @@ namespace Front_Endeavor.Models.ViewModels
 {
     public class PostViewModel
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Text { get; set; }
