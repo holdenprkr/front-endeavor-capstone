@@ -99,9 +99,8 @@ namespace Front_Endeavor.Controllers
                     Color1 = workspace.Color1,
                     Color2 = workspace.Color2,
                     Color3 = workspace.Color3
-            };
+                };
 
-                //return RedirectToAction("Details", "Workspaces", new { id = postViewModel.WorkspaceId });
                 return Ok(postResponse);
             }
             catch
@@ -212,7 +211,7 @@ namespace Front_Endeavor.Controllers
             }
             catch
             {
-                return View();
+                return NoContent();
             }
         }
         

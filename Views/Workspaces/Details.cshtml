@@ -111,46 +111,58 @@
                     {
                         @foreach (var post in Model.Posts)
                         {
-                            <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
-                                @*image*@
-                                <div class="rounded p-2"  style="border: 1px solid black;
+                <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
+                    @*image*@
+                    <div class="rounded p-2 mb-1" style="border: 1px solid black;
                  -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
                 -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
-                box-shadow: 3px 3px 4px 0px @Model.Color3;">                                         
-                                    @if (!String.IsNullOrEmpty(post.ImageFile))
-                                    {
-                                        <div class="text-center">
-                                            <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
-                                        </div>
-                                    }
-                                    @*text*@
-                                    <p class="mb-2 messageInputText">@post.Text</p>
-
-                                    @*link*@
-                                    @if (!String.IsNullOrEmpty(post.Link))
-                                    {
-                                        <a href="@post.Link" target="_blank" class="mb-2 messageInputText">User Posted Link</a>
-                                    }
-
-                                    <p class="text-right mb-0 messageInputText">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
-                                    @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
-                                    {
-                                        <div class="text-right">
-                                            <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--@post.Id">Edit</button>
-                                            <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id">Delete</button>
-                                        </div>
-                                    }
-                                </div>
-
-                                @*comments*@
-                                @foreach (var comment in post.Comments)
-                                {
-                                    <div>
-                                        <p>@comment.Text</p>
-                                        <p class="text-right">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.FirstName</p>
-                                    </div>
-                                }
+                box-shadow: 3px 3px 4px 0px @Model.Color3;">
+                        @if (!String.IsNullOrEmpty(post.ImageFile))
+                        {
+                            <div class="text-center">
+                                <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
                             </div>
+                        }
+                        @*text*@
+                        <p class="mb-2 messageInputText">@post.Text</p>
+
+                        @*link*@
+                        @if (!String.IsNullOrEmpty(post.Link))
+                        {
+                            <a href="@post.Link" target="_blank" class="mb-2 messageInputText">User Posted Link</a>
+                        }
+
+                        <p class="text-right mb-0 messageInputText">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
+                            <div class="text-right">
+                        @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
+                        {
+                                <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--@post.Id">Edit</button>
+                                <button class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id">Delete</button>
+                        }
+                                <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--@post.Id">Comment</button>
+                            </div>
+                    </div>
+
+                    @*comments*@
+                    @foreach (var comment in post.Comments)
+                    {
+                        <div class="p-2 rounded w-75 mb-1" id="Comment--@comment.Id" style="border: 1px solid black; border-top: none; margin-left: 25%;
+                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                -moz-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                box-shadow: 3px 3px 4px 0px @Model.Color1;">
+                            <p class="text-right mb-1 messageInputText">@comment.Text</p>
+                            <p class="text-right mb-0 messageInputText">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.LastName</p>
+                        @if (comment.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
+                        {
+                            <div class="text-right">
+                                <button class="btn btn-outline-danger btn-sm deleteCommentButton" id="Delete--@comment.Id">
+                                    Delete
+                                </button>
+                            </div>
+                        }
+                        </div>
+                    }
+                </div>
                         }
                     }
                 </div>
@@ -162,30 +174,35 @@
                 box-shadow: 3px 3px 4px 0px @Model.Color3;">
                 <form asp-action="Create" asp-controller="Posts" enctype="multipart/form-data" class="w-75" style="margin:0 auto;" id="postBoardForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    
-                    <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" id="inputWorkspaceId"/>
+
+                    <input type="hidden" asp-for="@Model.PostViewModel.WorkspaceId" value="@Model.Id" id="inputWorkspaceId" />
 
                     <div class="form-group">
-                        <label asp-for="@Model.PostViewModel.Text" class="control-label text-left postFormLabel">Text:</label>
-                        <textarea asp-for="@Model.PostViewModel.Text" class="form-control" id="inputText" ></textarea>
+                        <label asp-for="@Model.PostViewModel.Text" class="control-label text-left postFormLabel" id="inputTextLabel">Text:</label>
+                        <textarea asp-for="@Model.PostViewModel.Text" class="form-control" id="inputText"></textarea>
                         <span asp-validation-for="@Model.PostViewModel.Text" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="@Model.PostViewModel.Image" class="control-label text-left postFormLabel">Image Upload:</label>
-                        <input asp-for="@Model.PostViewModel.Image" class="form-control" type="file" id="inputImage"/>
-                        <span asp-validation-for="@Model.PostViewModel.Image" class="text-danger"></span>
+                        <input id="CommentButton" type="hidden" value="Add Comment" class="btn btn-primary" />
                     </div>
+                    <div id="HideWhileCommenting">
+                        <div class="form-group">
+                            <label asp-for="@Model.PostViewModel.Image" class="control-label text-left postFormLabel">Image Upload:</label>
+                            <input asp-for="@Model.PostViewModel.Image" class="form-control" type="file" id="inputImage" />
+                            <span asp-validation-for="@Model.PostViewModel.Image" class="text-danger"></span>
+                        </div>
 
-                    <div class="form-group">
-                        <label asp-for="@Model.PostViewModel.Link" class="control-label text-left postFormLabel">Link:</label>
-                        <input asp-for="@Model.PostViewModel.Link" class="form-control" type="url" id="inputLink"/>
-                        <span asp-validation-for="@Model.PostViewModel.Link" class="text-danger"></span>
-                    </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.PostViewModel.Link" class="control-label text-left postFormLabel">Link:</label>
+                            <input asp-for="@Model.PostViewModel.Link" class="form-control" type="url" id="inputLink" />
+                            <span asp-validation-for="@Model.PostViewModel.Link" class="text-danger"></span>
+                        </div>
 
-                    <div class="form-group">
-                        <input id="Submit" type="button" value="Submit" class="btn btn-primary" />
-                        <input id="Update" type="hidden" value="Update" class="btn btn-primary" />
+                        <div class="form-group">
+                            <input id="Submit" type="button" value="Submit" class="btn btn-primary" />
+                            <input id="Update" type="hidden" value="Update" class="btn btn-primary" />
+                        </div>
                     </div>
                 </form>
             </div>
