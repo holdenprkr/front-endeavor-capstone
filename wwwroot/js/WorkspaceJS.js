@@ -23,8 +23,7 @@ var style = document.createElement('style');
 style.innerHTML = `
   .darkmode-toggle {
     z-index: 1;
-}
-  `;
+}`;
 document.head.appendChild(style);
 
 const submitButton = document.getElementById("Submit");
@@ -169,6 +168,24 @@ allDeleteButtons.forEach(db => {
     })
 })
 
+let allDeleteCommentButtons = document.querySelectorAll(".deleteCommentButton");
+
+allDeleteCommentButtons.forEach(db => {
+    db.addEventListener("click", async e => {
+        e.preventDefault();
+        const [d, id] = e.target.id.split("--");
+        await fetch(`/Comments/Delete/${id}`, {
+            method: "Post",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const comment = document.getElementById(`Comment--${id}`);
+        comment.remove();
+    })
+})
+
 const postBoardForm = document.getElementById("postBoardForm")
 
 let postEditButtons = document.querySelectorAll(".postEditButton")
@@ -180,7 +197,6 @@ postEditButtons.forEach(eb => {
         const [edit, id] = e.target.id.split("--");
         const foundPost = await fetch(`/Posts/Index/${id}`).then(res => res.json())
 
-        console.log(foundPost)
         document.getElementById("inputWorkspaceId").value = foundPost.workspaceId
         document.getElementById("inputText").value = foundPost.text
         document.getElementById("inputLink").value = foundPost.link
@@ -243,6 +259,7 @@ postEditButtons.forEach(eb => {
             postHTML += `<div class="text-right">
                         <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--${data.id}">Edit</button>
                         <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--${data.id}">Delete</button>
+                        <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--${data.id}">Comment</button>
                     </div>`;
 
             var post = document.getElementById(`Post--${id}`)
@@ -364,6 +381,7 @@ submitButton.addEventListener("click", async e => {
     postHTML += `<div class="text-right">
                         <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--${dataObj.id}">Edit</button>
                         <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--${dataObj.id}">Delete</button>
+                        <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--${dataObj.id}">Comment</button>
                     </div>
                 </div>`;
                             
@@ -456,14 +474,15 @@ submitButton.addEventListener("click", async e => {
                 }
 
                 if (isDark()) {
-                    postHTML += `<p class="text-right mb-0 text-white">- ${dataObj.firstName} ${dataObj.lastName}</p>`;
+                    postHTML += `<p class="text-right mb-0 text-white">- ${data.firstName} ${data.lastName}</p>`;
                 } else {
-                    postHTML += `<p class="text-right mb-0">- ${dataObj.firstName} ${dataObj.lastName}</p>`;
+                    postHTML += `<p class="text-right mb-0">- ${data.firstName} ${data.lastName}</p>`;
                 }
 
                 postHTML += `<div class="text-right">
                         <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--${data.id}">Edit</button>
                         <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--${data.id}">Delete</button>
+                        <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--${data.id}">Comment</button>
                     </div>`;
 
                 var post = document.getElementById(`Post--${id}`)
@@ -497,3 +516,84 @@ submitButton.addEventListener("click", async e => {
     })
 })
 
+let commentButtons = document.querySelectorAll(".commentButton");
+
+commentButtons.forEach(cb => {
+    cb.addEventListener("click", async e => {
+        e.preventDefault();
+
+        const [com, id] = e.target.id.split("--");
+        
+        document.getElementById("HideWhileCommenting").classList.add("hidden");
+        document.getElementById("inputTextLabel").innerText = "Comment:";
+        document.getElementById("CommentButton").type = "button";
+
+        postBoardForm.scrollIntoView({ behavior: "smooth" });
+
+        document.getElementById("CommentButton").addEventListener("click", async event => {
+            const comment = document.getElementById("inputText").value;
+
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('text', comment)
+            formData.append('postId', id)
+
+            const dataObj = await fetch("/Comments/Create", {
+                method: "Post",
+                body: formData
+            }).then(res => res.json());
+
+            console.log(dataObj);
+
+            let commentHTML;
+
+            commentHTML = `<div class="p-2 rounded w-75 align-content-right" id="Comment--${dataObj.id}" style="border: 1px solid black; border-top: none; margin-left: 25%;
+                            -webkit-box-shadow: 3px 3px 4px 0px ${dataObj.color1};
+                            -moz-box-shadow: 3px 3px 4px 0px ${dataObj.color1};
+                            box-shadow: 3px 3px 4px 0px ${dataObj.color1}">`
+
+            if (isDark()) {
+                commentHTML += `<p class="text-right text-white mb-1">${dataObj.text}</p>
+                            <p class="text-right text-white mb-0">- ${dataObj.firstName} ${dataObj.lastName}</p>`
+            } else {
+                commentHTML += `<p class="text-right">${dataObj.text}</p>
+                            <p class="text-right mb-0">- ${dataObj.firstName} ${dataObj.lastName}</p>`
+            }
+
+                            
+
+                commentHTML += `<div class="text-right">
+                                <button class="btn btn-outline-danger btn-sm deleteCommentButton" id="Delete--${dataObj.id}">Delete</button>
+                            </div>
+                           </div>`
+
+            document.getElementById(`Post--${id}`).innerHTML += commentHTML
+
+            document.getElementById(`Post--${id}`).scrollIntoView({ behavior: "smooth" });
+
+            postBoardForm.reset();
+
+            document.getElementById("HideWhileCommenting").classList.remove("hidden");
+            document.getElementById("inputTextLabel").innerText = "Text:";
+            document.getElementById("CommentButton").type = "hidden";
+
+            allDeleteCommentButtons = document.querySelectorAll(".deleteCommentButton");
+
+            allDeleteCommentButtons.forEach(db => {
+                db.addEventListener("click", async e => {
+                    e.preventDefault();
+                    const [d, id] = e.target.id.split("--");
+                    await fetch(`/Comments/Delete/${id}`, {
+                        method: "Post",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+
+                    const comment = document.getElementById(`Comment--${id}`);
+                    comment.remove();
+                })
+            })
+        })
+    })
+})
