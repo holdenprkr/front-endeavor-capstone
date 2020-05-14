@@ -101,7 +101,7 @@
                 <div class="d-inline-block overflow-auto rounded p-3 mt-3 mb-3" id="postingBoard" style="max-height: 750px; min-height: 150px; width: 85%;">
                     @if (Model.Posts.Count == 0)
                     {
-                        <div class="projectPost rounded">
+                        <div class="projectPost rounded" id="noPostsMessage">
                             Oh no! It looks like no one on your team has posted anything yet.
                             <br />
                             Why don't you break the ice?
@@ -179,7 +179,7 @@
 
                     <div class="form-group">
                         <label asp-for="@Model.PostViewModel.Text" class="control-label text-left postFormLabel" id="inputTextLabel">Text:</label>
-                        <textarea asp-for="@Model.PostViewModel.Text" class="form-control" id="inputText"></textarea>
+                        <textarea asp-for="@Model.PostViewModel.Text" class="form-control rounded" id="inputText"></textarea>
                         <span asp-validation-for="@Model.PostViewModel.Text" class="text-danger"></span>
                     </div>
 
@@ -189,13 +189,13 @@
                     <div id="HideWhileCommenting">
                         <div class="form-group">
                             <label asp-for="@Model.PostViewModel.Image" class="control-label text-left postFormLabel">Image Upload:</label>
-                            <input asp-for="@Model.PostViewModel.Image" class="form-control" type="file" id="inputImage" />
+                            <input asp-for="@Model.PostViewModel.Image" class="form-control rounded" type="file" id="inputImage" />
                             <span asp-validation-for="@Model.PostViewModel.Image" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label asp-for="@Model.PostViewModel.Link" class="control-label text-left postFormLabel">Link:</label>
-                            <input asp-for="@Model.PostViewModel.Link" class="form-control" type="url" id="inputLink" />
+                            <input asp-for="@Model.PostViewModel.Link" class="form-control rounded" type="url" id="inputLink" />
                             <span asp-validation-for="@Model.PostViewModel.Link" class="text-danger"></span>
                         </div>
 
