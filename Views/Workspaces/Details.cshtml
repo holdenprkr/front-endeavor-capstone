@@ -1,12 +1,13 @@
 ﻿@model Front_Endeavor.Models.ViewModels.WorkspaceViewModel
-@using Microsoft.AspNetCore.Identity
+@using System;
+@using Microsoft.AspNetCore.Identity;
 @inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<div class="text-center p-5" style="border: 1px solid black;
+<div class="text-center p-5 table-primary" id="workspaceContainer" style="border: 1px solid black;
                  -webkit-box-shadow: 3px 3px 4px 0px @Model.Color1;
                 -moz-box-shadow: 3px 3px 4px 0px @Model.Color1;
                 box-shadow: 3px 3px 4px 0px @Model.Color1; border-radius: 1%; isolation: isolate;" >
@@ -113,7 +114,7 @@
                         {
                 <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
                     @*image*@
-                    <div class="rounded p-2 mb-1" style="border: 1px solid black;
+                    <div class="rounded p-2 mb-1 table-primary messagePost" style="border: 1px solid black;
                  -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
                 -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
                 box-shadow: 3px 3px 4px 0px @Model.Color3;">
@@ -129,7 +130,7 @@
                         @*link*@
                         @if (!String.IsNullOrEmpty(post.Link))
                         {
-                            <a href="@post.Link" target="_blank" class="mb-2 messageInputText">User Posted Link</a>
+                            <a href="@post.Link" target="_blank" class="mb-2 messageInputText">@(new Uri(post.Link).Host)</a>
                         }
 
                         <p class="text-right mb-0 messageInputText">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>

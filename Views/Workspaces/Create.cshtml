@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create a Workspace</h1>
 
-<h4>Workspace</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,42 +13,42 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Project Name</label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control rounded" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label">Project Description</label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control rounded" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GithubRepo" class="control-label">GitHub Repository URL</label>
-                <input asp-for="GithubRepo" class="form-control" />
+                <input asp-for="GithubRepo" class="form-control rounded" />
                 <span asp-validation-for="GithubRepo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataRelatDiagram" class="control-label">Data Relationship Diagram URL</label>
-                <input asp-for="DataRelatDiagram" class="form-control" />
+                <input asp-for="DataRelatDiagram" class="form-control rounded" />
                 <span asp-validation-for="DataRelatDiagram" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MockupDiagram" class="control-label">Mockup Diagram URL</label>
-                <input asp-for="MockupDiagram" class="form-control" />
+                <input asp-for="MockupDiagram" class="form-control rounded" />
                 <span asp-validation-for="MockupDiagram" class="text-danger"></span>
             </div>
             <div class="form-group w-50">
                 <label asp-for="Color1" class="control-label">Primary Color</label>
-                <input asp-for="Color1" class="form-control" type="color"/>
+                <input asp-for="Color1" class="form-control rounded" type="color"/>
                 <span asp-validation-for="Color1" class="text-danger"></span>
             </div>
             <div class="form-group w-50">
                 <label asp-for="Color2" class="control-label">Secondary Color</label>
-                <input asp-for="Color2" class="form-control" type="color"/>
+                <input asp-for="Color2" class="form-control rounded" type="color"/>
                 <span asp-validation-for="Color2" class="text-danger"></span>
             </div>
             <div class="form-group w-50">
                 <label asp-for="Color3" class="control-label">Tertiary Color</label>
-                <input asp-for="Color3" class="form-control" type="color"/>
+                <input asp-for="Color3" class="form-control rounded" type="color"/>
                 <span asp-validation-for="Color3" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -41,6 +41,8 @@ const addUserButtons = Array.from(document.getElementsByClassName("addUserButton
 const tooManyResultsAlert = document.getElementById("tooManyResults");
 const editWorkspaceButton = document.getElementById("editWorkspaceButton");
 const noPostsMessage = document.getElementById("noPostsMessage");
+const workspaceContainer = document.getElementById("workspaceContainer");
+const messagePosts = Array.from(document.getElementsByClassName("messagePost"));
 
 const isDark = () => {
     return darkSwitch.classList.contains("darkmode-toggle--white")
@@ -82,6 +84,10 @@ if (isDark()) {
     if (noPostsMessage) {
         noPostsMessage.classList.add("text-white");
     }
+    workspaceContainer.classList.remove("table-primary");
+    if (messagePosts) {
+        messagePosts.map(element => element.classList.remove("table-primary"));
+    }
 }
 
 darkSwitch.addEventListener("click", e => {
@@ -121,6 +127,10 @@ darkSwitch.addEventListener("click", e => {
         if (noPostsMessage) {
             noPostsMessage.classList.add("text-white");
         }
+        workspaceContainer.classList.remove("table-primary");
+        if (messagePosts) {
+            messagePosts.map(element => element.classList.remove("table-primary"));
+        }
     } else {
         if (searchUserLabel) {
             searchUserLabel.classList.remove("text-white");
@@ -156,6 +166,10 @@ darkSwitch.addEventListener("click", e => {
         }
         if (noPostsMessage) {
             noPostsMessage.classList.remove("text-white");
+        }
+        workspaceContainer.classList.add("table-primary");
+        if (messagePosts) {
+            messagePosts.map(element => element.classList.add("table-primary"));
         }
     }
 })

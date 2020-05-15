@@ -72,3 +72,7 @@ body {
 .hidden {
     display: none;
 }
+
+.html {
+    background-color: #defafc;
+}
