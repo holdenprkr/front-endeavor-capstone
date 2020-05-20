@@ -296,24 +296,7 @@ postEditButtons.forEach(eb => {
 
             location.reload();
             return false;
-            //allDeleteButtons = document.querySelectorAll(".deleteButton");
-
-            //allDeleteButtons.forEach(db => {
-            //    db.addEventListener("click", async e => {
-
-            //        e.preventDefault();
-            //        const [d, id] = e.target.id.split("--");
-            //        await fetch(`/Posts/Delete/${id}`, {
-            //            method: "Post",
-            //            headers: {
-            //                "Content-Type": "application/json"
-            //            }
-            //        });
-
-            //        const post = document.getElementById(`Post--${id}`);
-            //        post.remove();
-            //    })
-            //})
+            
         })
     })
 })
@@ -415,147 +398,6 @@ submitButton.addEventListener("click", async e => {
     contentTarget.innerHTML += postHTML;
 
     document.location.reload(true);
-
-                //const post = document.getElementById(`Post--${dataObj.id}`)
-                //post.scrollIntoView({ behavior: "smooth" });
-
-                //allDeleteButtons = document.querySelectorAll(".deleteButton");
-
-                //allDeleteButtons.forEach(db => {
-                //    db.removeEventListener("click", async e => {
-
-                //        e.preventDefault();
-                //        const [d, id] = e.target.id.split("--");
-                //        await fetch(`/Posts/Delete/${id}`, {
-                //            method: "Post",
-                //            headers: {
-                //                "Content-Type": "application/json"
-                //            }
-                //        });
-
-                //        const post = document.getElementById(`Post--${id}`);
-                //        post.remove();
-                //    })
-                //})
-
-                //allDeleteButtons.forEach(db => {
-                //    db.addEventListener("click", async e => {
-
-                //        e.preventDefault();
-                //        const [d, id] = e.target.id.split("--");
-                //        await fetch(`/Posts/Delete/${id}`, {
-                //            method: "Post",
-                //            headers: {
-                //                "Content-Type": "application/json"
-                //            }
-                //        });
-
-                //        const post = document.getElementById(`Post--${id}`);
-                //        post.remove();
-                //    })
-                //})
-
-    //postEditButtons = document.querySelectorAll(".postEditButton")
-
-    //postEditButtons.forEach(eb => {
-    //    eb.addEventListener("click", async e => {
-    //        e.preventDefault();
-
-    //        const [edit, id] = e.target.id.split("--");
-    //        const foundPost = await fetch(`/Posts/Index/${id}`).then(res => res.json())
-
-    //        console.log(foundPost)
-    //        document.getElementById("inputWorkspaceId").value = foundPost.workspaceId
-    //        document.getElementById("inputText").value = foundPost.text
-    //        document.getElementById("inputLink").value = foundPost.link
-    //        document.getElementById("Submit").type = "hidden"
-    //        document.getElementById("Update").type = "button"
-
-
-    //        postBoardForm.scrollIntoView({ behavior: "smooth" });
-
-    //        document.getElementById("Update").addEventListener("click", async event => {
-    //            const workspaceId = document.getElementById("inputWorkspaceId").value
-    //            const text = document.getElementById("inputText").value
-    //            const image = document.getElementById("inputImage")
-    //            const link = document.getElementById("inputLink").value
-
-    //            event.preventDefault();
-    //            const formData = new FormData();
-    //            formData.append("workspaceId", workspaceId)
-    //            formData.append('text', text)
-    //            formData.append('image', image.files[0])
-    //            formData.append('link', link)
-
-    //            const data = await fetch(`/Posts/Edit/${id}`, {
-    //                method: "Put",
-    //                body: formData
-    //            }).then(res => res.json())
-
-    //            postBoardForm.reset();
-
-    //            let postHTML;
-
-    //            postHTML =
-    //                `<div class="rounded p-2" style="border: 1px solid black;
-    //             -webkit-box-shadow: 3px 3px 4px 0px ${data.color3};
-    //            -moz-box-shadow: 3px 3px 4px 0px ${data.color3};
-    //            box-shadow: 3px 3px 4px 0px ${data.color3};">`;
-
-    //            if (data.imageFile != null) {
-    //                postHTML += `<div class="text-center">
-    //            <img src="/Images/${data.imageFile}" alt="user posted image" class="mb-2" style="max-width:80%;">
-    //            </div>`;
-    //            }
-
-    //            if (isDark()) {
-    //                postHTML += `<p class="mb-2 text-white">${data.text}</p >`;
-    //            } else {
-    //                postHTML += `<p class="mb-2">${data.text}</p >`;
-    //            }
-
-    //            if (data.link != null) {
-    //                postHTML += `<a href="${data.link}" target="_blank" class="mb-2">User Posted Link</a>`;
-    //            }
-
-    //            if (isDark()) {
-    //                postHTML += `<p class="text-right mb-0 text-white">- ${data.firstName} ${data.lastName}</p>`;
-    //            } else {
-    //                postHTML += `<p class="text-right mb-0">- ${data.firstName} ${data.lastName}</p>`;
-    //            }
-
-    //            postHTML += `<div class="text-right">
-    //                    <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--${data.id}">Edit</button>
-    //                    <button type="submit" class="btn btn-outline-danger btn-sm deleteButton" id="Delete--${data.id}">Delete</button>
-    //                    <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--${data.id}">Comment</button>
-    //                </div>`;
-
-    //            var post = document.getElementById(`Post--${id}`)
-
-    //            post.innerHTML = postHTML;
-
-    //            post.scrollIntoView({ behavior: "smooth" });
-    //            document.getElementById("Update").type = "hidden"
-    //            document.getElementById("Submit").type = "Button"
-
-                //const newPost = document.getElementById(`Post--${dataObj.id}`);
-
-                //newPost.addEventListener("click", async e => {
-                //    e.preventDefault();
-                //    const [d, id] = e.target.id.split("--");
-                //    await fetch(`/Posts/Delete/${id}`, {
-                //        method: "Post",
-                //        headers: {
-                //            "Content-Type": "application/json"
-                //        }
-                //    });
-
-                //    const addedPost = document.getElementById(`Post--${id}`);
-                //    addedPost.remove();
-                //})
-        //    })
-        //})
-    //})
 })
 
 let commentButtons = document.querySelectorAll(".commentButton");
@@ -613,34 +455,6 @@ commentButtons.forEach(cb => {
             post.innerHTML += commentHTML
 
             document.location.reload(true);
-
-            //document.getElementById("postingBoard").location.reload(true)
-            
-
-            //postBoardForm.reset();
-
-            //document.getElementById("HideWhileCommenting").classList.remove("hidden");
-            //document.getElementById("inputTextLabel").innerText = "Text:";
-            //document.getElementById("CommentButton").type = "hidden";
-
-
-
         })
-
-        //newDeleteCommentButton = document.getElementById(`Delete--${dataObj.id}`);
-
-        //newDeleteCommentButton.addEventListener("click", async e => {
-        //    e.preventDefault();
-        //    const [d, id] = e.target.id.split("--");
-        //    await fetch(`/Comments/Delete/${id}`, {
-        //        method: "Post",
-        //        headers: {
-        //            "Content-Type": "application/json"
-        //        }
-        //    });
-
-        //    const comment = document.getElementById(`Comment--${id}`);
-        //    comment.remove();
-        //})
     })
 })
