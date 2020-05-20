@@ -8,7 +8,7 @@ Front-Endeavor is an application designed for front end developers to have a vir
 
 <!-- images here -->
 
-<img src="./wwwroot/READMEimages/Front-En1.png" height="180" width="260"> <img src="./wwwroot/READMEimages/Front-En2.png" height="180" width="260"> <img src="./wwwroot/READMEimages/Front-En3.png" height="180" width="260">
+<img src="./wwwroot/READMEimages/Front-En1.png" width="260"> <img src="./wwwroot/READMEimages/Front-En2.png" width="260"> <img src="./wwwroot/READMEimages/Front-En3.png"  width="260">
 
 ## Installation
 
