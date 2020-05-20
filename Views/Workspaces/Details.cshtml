@@ -16,7 +16,6 @@
             @if (Model.UserWorkspaces.FirstOrDefault(uw => uw.ApplicationUserId == UserManager.GetUserAsync(User).Result.Id).DevLead)
             {
                 <div class="mb-2">
-                    @*Search for users by email*@
                     <form asp-action="Details" asp-route-id="@Model.Id" class="mb-2">
                         <label class="control-label text-left text-lg-center mb-0" style="font-size: 20px;" id="searchUserLabel">Search Users by Email:</label>
                         <input type="text" name="SearchString" class="form-control form-inline w-100 mb-2 rounded">
@@ -98,7 +97,6 @@
                  -webkit-box-shadow: 3px 3px 4px 0px @Model.Color2;
                 -moz-box-shadow: 3px 3px 4px 0px @Model.Color2;
                 box-shadow: 3px 3px 4px 0px @Model.Color2;">
-                @*<h3 class="font-weight-normal">Project idea board</h3>*@
                 <div class="d-inline-block overflow-auto rounded p-3 mt-3 mb-3" id="postingBoard" style="max-height: 750px; min-height: 150px; width: 85%;">
                     @if (Model.Posts.Count == 0)
                     {
@@ -112,58 +110,57 @@
                     {
                         @foreach (var post in Model.Posts)
                         {
-                <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
-                    @*image*@
-                    <div class="rounded p-2 mb-1 table-primary messagePost" style="border: 1px solid black;
-                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
-                -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
-                box-shadow: 3px 3px 4px 0px @Model.Color3;">
-                        @if (!String.IsNullOrEmpty(post.ImageFile))
-                        {
-                            <div class="text-center">
-                                <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
-                            </div>
-                        }
-                        @*text*@
-                        <p class="mb-2 messageInputText">@post.Text</p>
+                        <div class="projectPost rounded text-left mb-2" id="Post--@post.Id">
+                            <div class="rounded p-2 mb-1 table-primary messagePost" style="border: 1px solid black;
+                                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                                -moz-box-shadow: 3px 3px 4px 0px @Model.Color3;
+                                box-shadow: 3px 3px 4px 0px @Model.Color3;">
+                                @if (!String.IsNullOrEmpty(post.ImageFile))
+                                {
+                                    <div class="text-center">
+                                        <img src="~/Images/@post.ImageFile" alt="user posted image" class="mb-2" style="max-width:80%;">
+                                    </div>
+                                }
+                                @*text*@
+                                <p class="mb-2 messageInputText">@post.Text</p>
 
-                        @*link*@
-                        @if (!String.IsNullOrEmpty(post.Link))
-                        {
-                            <a href="@post.Link" target="_blank" class="mb-2 messageInputText">@(new Uri(post.Link).Host)</a>
-                        }
+                                @*link*@
+                                @if (!String.IsNullOrEmpty(post.Link))
+                                {
+                                    <a href="@post.Link" target="_blank" class="mb-2 messageInputText">@(new Uri(post.Link).Host)</a>
+                                }
 
-                        <p class="text-right mb-0 messageInputText">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
-                            <div class="text-right">
-                        @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
-                        {
-                                <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--@post.Id">Edit</button>
-                                <button class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id">Delete</button>
-                        }
-                                <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--@post.Id">Comment</button>
+                                <p class="text-right mb-0 messageInputText">- @post.ApplicationUser.FirstName @post.ApplicationUser.LastName</p>
+                                <div class="text-right">
+                                @if (post.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
+                                {
+                                        <button class="btn btn-outline-success btn-sm postEditButton" id="Edit--@post.Id">Edit</button>
+                                        <button class="btn btn-outline-danger btn-sm deleteButton" id="Delete--@post.Id">Delete</button>
+                                }
+                                        <button class="btn btn-outline-warning btn-sm commentButton" id="Comment--@post.Id">Comment</button>
+                                </div>
                             </div>
-                    </div>
 
-                    @*comments*@
-                    @foreach (var comment in post.Comments)
-                    {
-                        <div class="p-2 rounded w-75 mb-1" id="Comment--@comment.Id" style="border: 1px solid black; border-top: none; margin-left: 25%;
-                 -webkit-box-shadow: 3px 3px 4px 0px @Model.Color1;
-                -moz-box-shadow: 3px 3px 4px 0px @Model.Color1;
-                box-shadow: 3px 3px 4px 0px @Model.Color1;">
-                            <p class="text-right mb-1 messageInputText">@comment.Text</p>
-                            <p class="text-right mb-0 messageInputText">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.LastName</p>
-                        @if (comment.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
-                        {
-                            <div class="text-right">
-                                <button class="btn btn-outline-danger btn-sm deleteCommentButton" id="Delete--@comment.Id">
-                                    Delete
-                                </button>
-                            </div>
-                        }
+                            @*comments*@
+                            @foreach (var comment in post.Comments)
+                            {
+                                <div class="p-2 rounded w-75 mb-1" id="Comment--@comment.Id" style="border: 1px solid black; border-top: none; margin-left: 25%;
+                                         -webkit-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                                        -moz-box-shadow: 3px 3px 4px 0px @Model.Color1;
+                                        box-shadow: 3px 3px 4px 0px @Model.Color1;">
+                                    <p class="text-right mb-1 messageInputText">@comment.Text</p>
+                                    <p class="text-right mb-0 messageInputText">- @comment.ApplicationUser.FirstName @comment.ApplicationUser.LastName</p>
+                                @if (comment.ApplicationUserId == @UserManager.GetUserAsync(User).Result.Id)
+                                {
+                                    <div class="text-right">
+                                        <button class="btn btn-outline-danger btn-sm deleteCommentButton" id="Delete--@comment.Id">
+                                            Delete
+                                        </button>
+                                    </div>
+                                }
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
                         }
                     }
                 </div>

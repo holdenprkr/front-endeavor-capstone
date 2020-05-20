@@ -55,7 +55,10 @@ namespace Front_Endeavor.Data
                 {
                     Id = 1,
                     Name = "FunkyFrontEnd",
-                    Description = "The funkiest front-end on the web!"
+                    Description = "The funkiest front-end on the web!",
+                    Color1 = "#000000",
+                    Color2 = "#000000",
+                    Color3 = "#000000"
                 }
             );
 

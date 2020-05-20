@@ -35,20 +35,7 @@ namespace Front_Endeavor.Controllers
             return View();
         }
 
-        // GET: UserWorkspaces/Create
-        //public async Task<ActionResult> Create(string searchString)
-        //{
-        //    var allUsers = await _context.ApplicationUser.ToListAsync();
-
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        allUsers = allUsers.Where(au => au.Email.Contains(searchString)).ToList();
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: UserWorkspaces/Create
+        // POST: UserWorkspaces/CreateTeam
         [HttpPost]
         public async Task<ActionResult> CreateTeam([FromQuery] int workspaceId, [FromQuery]string userId)
         {
